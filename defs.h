@@ -14,6 +14,49 @@
 #define USLEEP_TIME     50000
 #define BOREDOM_MAX        99
 
+typedef struct {
+  int id;
+  char name[MAX_STR];
+  struct GhostList *ghosts;
+
+} RoomType;
+
+typedef struct {
+  int id;
+  GhostEnumType ghostType;
+  RoomType *room;
+  float likelihood;
+
+} GhostType;
+
+typedef struct RoomArray {
+  RoomType *elements[MAX_ARR];
+  int size;
+  int capacity;
+
+} RoomArrayType;
+
+typedef struct Node{
+    struct Node *next;
+    Room *data;
+
+}RoomNode;
+
+typedef struct{
+    RoomNode *head;
+    RoomNode *tail;
+
+}RoomList;
+
+typdef struct{
+   struct Room *current;
+    EvidenceClassType readable;
+    EvidenceType //Maybe dynamic array?
+    int fear;
+    int interest;
+
+}HunterType;
+
 // You may rename these types if you wish
 typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceClassType;
 typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostClassType;
@@ -22,3 +65,6 @@ int randInt(int, int);          // Generates a pseudorandom integer between the 
 float randFloat(float, float);  // Generates a pseudorandom float between the parameters
 
 void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
+void initGhost();
+void initHunter();
+void initRoom();
