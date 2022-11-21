@@ -14,23 +14,26 @@
 #define USLEEP_TIME     50000
 #define BOREDOM_MAX        99
 
-typedef struct {
-  int id;
-  char name[MAX_STR];
-  struct GhostList *ghosts;
+typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceEnumType;
+typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostClassType;
 
+
+typedef struct {
+  char name[MAX_STR]; // good
+  GhostType* ghost;
+  RoomListType* neighbours
+  EvidenceListType
 } RoomType;
 
 typedef struct {
   int id;
-  GhostEnumType ghostType;
+  GhostClassType ghostType;
   RoomType *room;
   float likelihood;
-
 } GhostType;
 
 typedef struct RoomArray {
-  RoomType *elements[MAX_ARR];
+  // RoomType *elements[MAX_ARR];
   int size;
   int capacity;
 
@@ -38,39 +41,46 @@ typedef struct RoomArray {
 
 typedef struct Node{
     struct Node *next;
-    Room *data;
-
-}RoomNode;
+    // Room *data;
+} RoomNodeType;
 
 typedef struct{
-    RoomNode *head;
-    RoomNode *tail;
-
-}RoomList;
+    RoomNodeType *head;
+    RoomNodeType *tail;
+} RoomListType;
 
 typedef struct{
    struct Room *current;
-    EvidenceClassType readable;
-    EvidenceType //Maybe dynamic array?
+    EvidenceEnumType readable;
+    EvidenceType ada; //Maybe dynamic array? 
     int fear;
     int interest;
 
-}HunterType;
+} HunterType;
 
 typedef struct{
     float value;
-    EvidenceClassType type;
+    EvidenceEnumType type;
+} EvidenceType;
 
-}EvidenceType
+typedef struct EvidenceNode {
+  struct EvidenceNode *next;
+  EvidenceType* data;
+} EvidenceNodeType;
+
+typedef struct {
+  EvidenceNodeType* head;
+  EvidenceNodeType* tail;
+} EvidenceListType;
 
 // You may rename these types if you wish
-typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceClassType;
-typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostClassType;
 
 int randInt(int, int);          // Generates a pseudorandom integer between the parameters
 float randFloat(float, float);  // Generates a pseudorandom float between the parameters
 
-void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
+// void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
 void initGhost();
 void initHunter();
-void initRoom();
+void initRoom(char[]);
+void initEvidence(float, EvidenceEnumType, EvidenceType*);
+void initEvidenceList(EvidenceListType*);
