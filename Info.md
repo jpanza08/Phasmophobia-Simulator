@@ -25,6 +25,7 @@
     - Building is based on **"Willow Street House"** from Phasma. Link to map available in specs
     - Sample populate function provided in building.c, process from moving from van to hallways
 
+
 **Ghost** 
 
     Moves between rooms and leaves evidence behind
@@ -80,7 +81,7 @@
     - Have either Standard Reading or Ghost Reading. NOT FIELDS
     - Generated based on the value of the interval.
     If ghost generates evidence that is within standard readings, it cannot be used to confirm its type.
-    Stored by each hunter and  in each room. Once evidence is found, it is no longer in room. Multiple hunters can point to the same evidence. 
+    Stored by each hunter and in each room. Once evidence is found, it is no longer in room. Multiple hunters can point to the same evidence. 
 
     Ghosts and their Evidence Types:
         POLTERGEIST: Leaves ghostly EMF, TEMPERATURE, and FINGERPRINTS

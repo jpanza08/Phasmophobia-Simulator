@@ -48,7 +48,7 @@ typedef struct{
 
 }RoomList;
 
-typdef struct{
+typedef struct{
    struct Room *current;
     EvidenceClassType readable;
     EvidenceType //Maybe dynamic array?
@@ -56,6 +56,12 @@ typdef struct{
     int interest;
 
 }HunterType;
+
+typedef struct{
+    float value;
+    EvidenceClassType type;
+
+}EvidenceType
 
 // You may rename these types if you wish
 typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceClassType;
