@@ -15,46 +15,30 @@
 #define BOREDOM_MAX        99
 
 typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceEnumType;
-typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostClassType;
+typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
 
-
+//Types
 typedef struct {
   char name[MAX_STR]; // good
   GhostType* ghost;
-  RoomListType* neighbours
-  EvidenceListType
+  RoomListType* next;
+  EvidenceListType* evidence;
+  HunterArray hunters[4];
 } RoomType;
 
 typedef struct {
-  int id;
-  GhostClassType ghostType;
-  RoomType *room;
-  float likelihood;
+  GhostEnumType type;
+  RoomType *currRoom;
+  int boredom;
+
 } GhostType;
 
-typedef struct RoomArray {
-  // RoomType *elements[MAX_ARR];
-  int size;
-  int capacity;
-
-} RoomArrayType;
-
-typedef struct Node{
-    struct Node *next;
-    // Room *data;
-} RoomNodeType;
-
 typedef struct{
-    RoomNodeType *head;
-    RoomNodeType *tail;
-} RoomListType;
-
-typedef struct{
-   struct Room *current;
-    EvidenceEnumType readable;
-    EvidenceType ada; //Maybe dynamic array? 
+    RoomType *room;
+    EvidenceEnumType reads;
+    EvidenceListType *found;
     int fear;
-    int interest;
+    int boredom;
 
 } HunterType;
 
@@ -63,15 +47,38 @@ typedef struct{
     EvidenceEnumType type;
 } EvidenceType;
 
+
+//Lists
+typedef struct{
+    RoomNodeType *head;
+    RoomNodeType *tail;
+} RoomListType;
+
+typedef struct {
+  EvNodeType *head;
+  EvNodeType *tail;
+} EvidenceListType;
+
+typdef struct {
+  int capacity;
+  int size;
+  HunterType **elements;
+  
+}HunterArray;
+
+
+
+//Nodes
+typedef struct Node{
+    struct Node *next;
+    RoomType *data;
+} RoomNodeType;
+
 typedef struct EvidenceNode {
   struct EvidenceNode *next;
   EvidenceType* data;
-} EvidenceNodeType;
+} EvNodeType;
 
-typedef struct {
-  EvidenceNodeType* head;
-  EvidenceNodeType* tail;
-} EvidenceListType;
 
 // You may rename these types if you wish
 
@@ -82,5 +89,16 @@ float randFloat(float, float);  // Generates a pseudorandom float between the pa
 void initGhost();
 void initHunter();
 void initRoom(char[]);
+
 void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
+void addEvidence(EvidenceListType*, EvidenceType*);
+void cleanupEvidenceList(EvidenceListType*);
+
+void initRoom(char*, RoomListType*, EvidenceListType*, HunterArrayType*, GhostType*, RoomType*);
+void initRoomList(RoomListType* arr);
+void addRoom(RoomListType *list, RoomType *room);
+void cleanupRoomList(RoomTypeList *list);
+
+void initHunter(RoomType*, EvidenceEnumType, HunterType*);
+void initHunterArray(HunterType*);
