@@ -18,58 +18,40 @@ typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceEnumType;
 typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
 
 //Types
-typedef struct {
-  char name[MAX_STR]; // good
-  GhostType* ghost;
-  RoomListType* next;
-  EvidenceListType* evidence;
-  HunterType hunters[4];
-} RoomType;
 
 typedef struct {
   GhostEnumType type;
-  RoomType *currRoom;
+  struct RoomType *currRoom;
   int boredom;
 
 } GhostType;
 
-typedef struct{
-    RoomType *room;
-    EvidenceEnumType reads;
-    EvidenceListType *found;
-    int fear;
-    int boredom;
-    int id;
+typedef struct RoomType {
+  char name[MAX_STR]; // good
+  GhostType* ghost;
+  struct RoomListType* next;
+  struct EvidenceListType* evidence;
+  // HunterType hunters[4];
+} RoomType;
 
-} HunterType;
+// typedef struct{
+//     RoomType *room;
+//     EvidenceEnumType reads;
+//     EvidenceListType *found;
+//     int fear;
+//     int boredom;
+//     int id;
 
-typedef struct{
+// } HunterType;
+
+typedef struct EvidenceType{
     float value;
     EvidenceEnumType type;
 } EvidenceType;
 
-
-//Lists
-typedef struct{
-    RoomNodeType *head;
-    RoomNodeType *tail;
-} RoomListType;
-
-typedef struct {
-    EvNodeType *head;
-    EvNodeType *tail;
-} EvidenceListType;
-
-typedef struct {
-    HunterNodeType *head;
-    HunterNodeType *tail;
-}HunterListType;
-
-
-
 //Nodes
-typedef struct Node{
-    struct Node *next;
+typedef struct RoomNodeType{
+    struct RoomNodeType *next;
     RoomType *data;
 } RoomNodeType;
 
@@ -78,10 +60,30 @@ typedef struct EvidenceNode {
   EvidenceType* data;
 } EvNodeType;
 
-typedef struct HunterNode{
-  struct HunterNode *next;
-  HunterType *data;
-}HunterNodeType;
+// typedef struct HunterNode{
+//   struct HunterNode *next;
+//   HunterType *data;
+// }HunterNodeType;
+
+// //Lists
+typedef struct RoomListType{
+  RoomNodeType *head;
+  RoomNodeType *tail;
+} RoomListType;
+
+typedef struct EvidenceListType{
+    EvNodeType *head;
+    EvNodeType *tail;
+} EvidenceListType;
+
+// typedef struct {
+//     HunterNodeType *head;
+//     HunterNodeType *tail;
+// } HunterListType;
+
+
+
+
 
 
 // You may rename these types if you wish
@@ -93,20 +95,21 @@ float randFloat(float, float);  // Generates a pseudorandom float between the pa
 
 void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
-void addEvidence(EvidenceListType*, EvidenceType*);
-void cleanupEvidenceList(EvidenceListType*);
+// void addEvidence(EvidenceListType*, EvidenceType*);
+// void cleanupEvidenceList(EvidenceListType*);
 
 
 void initRoom(char*, GhostType*, RoomType*);
 void initRoomList(RoomListType* arr);
-void addRoom(RoomListType *list, RoomType *room);
+void addListRoom(RoomListType *list, RoomType *room);
 void cleanupRoomList( RoomListType *list);
 
 
 void initGhost(RoomType*,GhostEnumType,GhostType*);
+const char* getGhostName(GhostEnumType);
 
-
-void initHunter(RoomType*, EvidenceEnumType, int,HunterType*);
-void initHunterList(HunterListType*);
-void addHunter(HunterListType*, HunterType*);
-void removeHunter(HunterListType*, HunterType*);
+// void initHunter(RoomType*, EvidenceEnumType, int,HunterType*);
+// void initHunterList(HunterListType*);
+// void addHunter(HunterListType*, HunterType*);
+// void removeHunter(HunterListType*, HunterType*);
+// void printHunter(HunterType*);
