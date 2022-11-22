@@ -1,3 +1,3 @@
 #include "defs.h"
 
-void  initRoom() 
+void initRoom() 
