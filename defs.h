@@ -23,7 +23,7 @@ typedef struct {
   GhostType* ghost;
   RoomListType* next;
   EvidenceListType* evidence;
-  HunterArray hunters[4];
+  HunterType hunters[4];
 } RoomType;
 
 typedef struct {

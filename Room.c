@@ -12,15 +12,15 @@ void initRoom(char* name, GhostType* ghost, RoomType* room){
 }
 
 void initRoomList(RoomListType* list){
-    list->head = NULL:
+    list->head = NULL;
     list->tail = NULL;
 
 
 }
 
 void addRoom(RoomListType *list, RoomType *room){
-    RoomNodeType* newNode = (*RoomNodeType) malloc(sizeof(RoomNodeType));
-    nodeType->data = room;
+    RoomNodeType* newNode = (RoomNodeType*) malloc(sizeof(RoomNodeType));
+    newNode->data = room;
 
     //Empty
     if(list->head == NULL){
@@ -35,7 +35,7 @@ void addRoom(RoomListType *list, RoomType *room){
 }
 
 
-void cleanupRoomList(RoomTypeList *list){
+void cleanupRoomList(RoomListType *list){
     RoomNodeType *curr, *next;
     
     if(list->head == NULL)
