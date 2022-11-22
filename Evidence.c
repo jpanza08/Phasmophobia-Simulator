@@ -1,4 +1,4 @@
-#include <defs.h>
+#include "defs.h"
 
 void initEvidence(float value, EvidenceEnumType reading, EvidenceType* ev) {
     ev->type = reading;
@@ -12,8 +12,8 @@ void initEvidenceList(EvidenceListType *list){
 }
 
 void addEvidence(EvidenceListType *list, EvidenceType *ev){
-    EvNodeType* newNode = (*EvNodeType) malloc(sizeof(EvNodeType));
-    nodeType->data = ev;
+    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
+    newNode->data = ev;
 
     //Empty
     if(list->head == NULL){
@@ -27,7 +27,7 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
 
 }
 
-void cleanupEvidenceList(EvidenceTypeList *list){
+void cleanupEvidenceList(EvidenceListType *list){
     EvNodeType *curr;
     
     if(list->head == NULL)
