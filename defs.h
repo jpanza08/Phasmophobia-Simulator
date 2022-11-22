@@ -59,12 +59,12 @@ typedef struct {
   EvNodeType *tail;
 } EvidenceListType;
 
-typdef struct {
+typedef struct {
   int capacity;
   int size;
   HunterType **elements;
   
-}HunterArray;
+}HunterArrayType;
 
 
 
@@ -86,19 +86,14 @@ int randInt(int, int);          // Generates a pseudorandom integer between the 
 float randFloat(float, float);  // Generates a pseudorandom float between the parameters
 
 // void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
-void initGhost();
-void initHunter();
-void initRoom(char[]);
 
 void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
 void addEvidence(EvidenceListType*, EvidenceType*);
 void cleanupEvidenceList(EvidenceListType*);
-
-void initRoom(char*, RoomListType*, EvidenceListType*, HunterArrayType*, GhostType*, RoomType*);
+void initRoom(char*, GhostType*, RoomType*);
 void initRoomList(RoomListType* arr);
 void addRoom(RoomListType *list, RoomType *room);
-void cleanupRoomList(RoomTypeList *list);
-
+void cleanupRoomList( RoomListType *list);
 void initHunter(RoomType*, EvidenceEnumType, HunterType*);
 void initHunterArray(HunterType*);
