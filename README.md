@@ -1,4 +1,7 @@
 Todo:
 This 
 
-- Makefile
+- Makefile (Josh)
+...
+- Building (Vic)
+- Testing (Vic)

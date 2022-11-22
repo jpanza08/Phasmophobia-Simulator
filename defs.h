@@ -39,6 +39,7 @@ typedef struct{
     EvidenceListType *found;
     int fear;
     int boredom;
+    int id;
 
 } HunterType;
 
@@ -55,16 +56,14 @@ typedef struct{
 } RoomListType;
 
 typedef struct {
-  EvNodeType *head;
-  EvNodeType *tail;
+    EvNodeType *head;
+    EvNodeType *tail;
 } EvidenceListType;
 
 typedef struct {
-  int capacity;
-  int size;
-  HunterType **elements;
-  
-}HunterArrayType;
+    HunterNodeType *head;
+    HunterNodeType *tail;
+}HunterListType;
 
 
 
@@ -79,6 +78,11 @@ typedef struct EvidenceNode {
   EvidenceType* data;
 } EvNodeType;
 
+typedef struct HunterNode{
+  struct HunterNode *next;
+  HunterType *data;
+}HunterNodeType;
+
 
 // You may rename these types if you wish
 
@@ -91,9 +95,18 @@ void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
 void addEvidence(EvidenceListType*, EvidenceType*);
 void cleanupEvidenceList(EvidenceListType*);
+
+
 void initRoom(char*, GhostType*, RoomType*);
 void initRoomList(RoomListType* arr);
 void addRoom(RoomListType *list, RoomType *room);
 void cleanupRoomList( RoomListType *list);
-void initHunter(RoomType*, EvidenceEnumType, HunterType*);
-void initHunterArray(HunterType*);
+
+
+void initGhost(RoomType*,GhostEnumType,GhostType*);
+
+
+void initHunter(RoomType*, EvidenceEnumType, int,HunterType*);
+void initHunterList(HunterListType*);
+void addHunter(HunterListType*, HunterType*);
+void removeHunter(HunterListType*, HunterType*);
