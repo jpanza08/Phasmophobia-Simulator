@@ -46,26 +46,26 @@ void printHunterList(RoomType* room) {
 }
 
 
-// void cleanupRoomList(RoomListType *list){
-//     RoomNodeType *curr, *next;
+void cleanupRoomList(RoomListType *list){
+    RoomNodeType *curr, *next;
     
-//     if(list->head == NULL)
-//         return;
-//     if(list->head == list->tail){
-//         free(list->head);
-//         return;
-//     }
+    if(list->head == NULL)
+        return;
+    if(list->head == list->tail){
+        free(list->head);
+        return;
+    }
 
-//     curr = list->head;
-//     next = curr;
+    curr = list->head;
+    next = curr;
     
-//     while(curr->next != NULL){
-//         next = curr->next;
-//         free(curr);
-//         curr = next;
+    while(curr->next != NULL){
+        next = curr->next;
+        free(curr);
+        curr = next;
 
-//     }
+    }
 
-//     free(curr);
-// }
+    free(curr);
+}
 

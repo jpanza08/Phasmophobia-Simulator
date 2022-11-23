@@ -1,7 +1,7 @@
 Todo:
 This 
 
-- Makefile (Josh)
+- Makefile (Josh) DONE
 - clean room list (josh)
 ...
 - Building (Vic)

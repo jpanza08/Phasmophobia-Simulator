@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     printf("\n%f", hunter.evList->tail->data->value);
 
     cleanupEvidenceList(hunter.evList);
-    // cleanupRoomList(ro.)
+    // cleanupRoomList(&hunter.room->next);
 
     return 0;
 }
