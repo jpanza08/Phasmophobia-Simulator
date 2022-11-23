@@ -46,7 +46,6 @@ void printHunterList(RoomType* room) {
 }
 
 
-
 // void cleanupRoomList(RoomListType *list){
 //     RoomNodeType *curr, *next;
     

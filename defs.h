@@ -90,6 +90,7 @@ void initEvidenceList(EvidenceListType*);
 void addEvidence(EvidenceListType*, EvidenceType*);
 void cleanupEvidenceList(EvidenceListType*);
 void printEvidenceList(EvidenceListType*);
+const char* getEvidenceName(EvidenceEnumType);
 
 
 void initRoom(char*, GhostType*, RoomType*);

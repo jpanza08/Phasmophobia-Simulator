@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     EvidenceType ev;
     
     initEvidence(13.23, EMF, &ev);
-
     initGhost(&ro, POLTERGEIST, &gh);
     printf("%s", getGhostName(gh.type));
     initRoom("Kitchen", &gh, &ro);
@@ -25,9 +24,11 @@ int main(int argc, char *argv[])
     printHunterList(&ro);
     addEvidenceToHunter(&hunter, &ev);
     printHunterEvidence(&hunter);
-    // printf("\n%f", hunter.evList->head->data->value);
+    printf("\n%f", hunter.evList->head->data->value);
     printf("\n%f", hunter.evList->tail->data->value);
 
+    cleanupEvidenceList(hunter.evList);
+    // cleanupRoomList(ro.)
 
     return 0;
 }

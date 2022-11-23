@@ -1,5 +1,15 @@
 #include "defs.h"
 
+
+const char* getEvidenceName(EvidenceEnumType name) {
+    switch(name) {
+        case EMF: return "EMF";
+        case TEMPERATURE: return "TEMPERATURE";
+        case FINGERPRINTS: return "FINGERPRINTS";
+        case SOUND: return "SOUND";
+    }
+}
+
 void initEvidence(float value, EvidenceEnumType reading, EvidenceType* ev) {
     ev->type = reading;
     ev->value = value;
@@ -28,7 +38,7 @@ void printEvidenceList(EvidenceListType* list) {
     EvNodeType* current = list->head;
     printf("\n");
     while(current != NULL) {
-        printf("type: %s ", getGhostName(current->data->type));
+        printf("type: %s ", getEvidenceName(current->data->type));
         current = current->next;
     }
     printf("\n");
