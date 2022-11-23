@@ -13,6 +13,8 @@
 #define MAX_HUNTERS         4
 #define USLEEP_TIME     50000
 #define BOREDOM_MAX        99
+#define C_NOK               0
+#define C_OK                1
 
 typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceEnumType;
 typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
@@ -23,7 +25,6 @@ typedef struct {
   GhostEnumType type;
   struct RoomType *currRoom;
   int boredom;
-
 } GhostType;
 
 typedef struct RoomType {
@@ -31,28 +32,28 @@ typedef struct RoomType {
   GhostType* ghost;
   struct RoomListType* next;
   struct EvidenceListType* evidence;
-  // HunterType hunters[4];
+  struct HunterType* hunters[4];
+  int hunterListSize;
 } RoomType;
 
-// typedef struct{
-//     RoomType *room;
-//     EvidenceEnumType reads;
-//     EvidenceListType *found;
-//     int fear;
-//     int boredom;
-//     int id;
-
-// } HunterType;
+typedef struct HunterType {
+  RoomType *room;
+  EvidenceEnumType reads;
+  struct EvidenceListType* evList;
+  int fear;
+  int boredom;
+  int id;
+} HunterType;
 
 typedef struct EvidenceType{
-    float value;
-    EvidenceEnumType type;
+  float value;
+  EvidenceEnumType type;
 } EvidenceType;
 
-//Nodes
+// Nodes
 typedef struct RoomNodeType{
-    struct RoomNodeType *next;
-    RoomType *data;
+  struct RoomNodeType *next;
+  RoomType *data;
 } RoomNodeType;
 
 typedef struct EvidenceNode {
@@ -60,26 +61,17 @@ typedef struct EvidenceNode {
   EvidenceType* data;
 } EvNodeType;
 
-// typedef struct HunterNode{
-//   struct HunterNode *next;
-//   HunterType *data;
-// }HunterNodeType;
-
-// //Lists
+// Lists
 typedef struct RoomListType{
   RoomNodeType *head;
   RoomNodeType *tail;
 } RoomListType;
 
 typedef struct EvidenceListType{
-    EvNodeType *head;
-    EvNodeType *tail;
+  EvNodeType *head;
+  EvNodeType *tail;
 } EvidenceListType;
 
-// typedef struct {
-//     HunterNodeType *head;
-//     HunterNodeType *tail;
-// } HunterListType;
 
 
 
@@ -95,21 +87,23 @@ float randFloat(float, float);  // Generates a pseudorandom float between the pa
 
 void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
-// void addEvidence(EvidenceListType*, EvidenceType*);
-// void cleanupEvidenceList(EvidenceListType*);
+void addEvidence(EvidenceListType*, EvidenceType*);
+void cleanupEvidenceList(EvidenceListType*);
+void printEvidenceList(EvidenceListType*);
 
 
 void initRoom(char*, GhostType*, RoomType*);
 void initRoomList(RoomListType* arr);
-void addListRoom(RoomListType *list, RoomType *room);
-void cleanupRoomList( RoomListType *list);
+void addListRoom(RoomListType* list, RoomType* room);
+void cleanupRoomList(RoomListType* list);
+void printHunterList(RoomType*);
 
 
-void initGhost(RoomType*,GhostEnumType,GhostType*);
+void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
 
-// void initHunter(RoomType*, EvidenceEnumType, int,HunterType*);
-// void initHunterList(HunterListType*);
-// void addHunter(HunterListType*, HunterType*);
-// void removeHunter(HunterListType*, HunterType*);
-// void printHunter(HunterType*);
+void initHunter(RoomType*, EvidenceEnumType, int, HunterType*);
+void addHunterToRoom(RoomType*, HunterType*);
+void addEvidenceToHunter(HunterType*, EvidenceType*);
+void removeHunterFromRoom(RoomType*, HunterType*);
+void printHunterEvidence(HunterType*);

@@ -9,11 +9,8 @@ void initRoom(char* name, GhostType* ghost, RoomType* room){
     initEvidenceList(evList);
     room->evidence = evList;
     room->next = roomList;
-
-    // initEvidenceList(room->evidence);
-    // initHunterArray(room->hunters);
-
     room->ghost = ghost;
+    room->hunterListSize = 0;
 }
 
 void initRoomList(RoomListType* list){
@@ -34,6 +31,20 @@ void addListRoom(RoomListType *list, RoomType *room){
         list->tail = newNode;
     }
 }
+
+void printHunterList(RoomType* room) {
+    int length = room->hunterListSize;
+    if(length != 0) {
+        printf("\n");
+        for(int i = 0; i < length; ++i) {
+            printf("Hunter id: %d ", room->hunters[i]->id);
+        }
+        printf("\n");
+    } else {
+        printf("\nList is empty.\n");
+    }
+}
+
 
 
 // void cleanupRoomList(RoomListType *list){

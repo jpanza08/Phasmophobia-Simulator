@@ -1,6 +1,9 @@
 #include "defs.h"
 
 void initHunter(RoomType* room, EvidenceEnumType reads, int id, HunterType* h){
+    EvidenceListType* evFound = (EvidenceListType*)malloc(sizeof(EvidenceListType));
+    
+    h->evList = evFound;
     h->room = room;
     h->reads = reads;
     h->fear = 0;
@@ -8,53 +11,44 @@ void initHunter(RoomType* room, EvidenceEnumType reads, int id, HunterType* h){
     h->id = id;
 }
 
-void initHunterList(HunterListType* list){
-    list->head = NULL;
-    list->tail = NULL;
+void addEvidenceToHunter(HunterType* h, EvidenceType* ev) {
+    addEvidence(h->evList, ev);
 }
 
-void addHunter(HunterListType* list, HunterType* h){
-    HunterNodeType *newNode = (HunterNodeType*) malloc(sizeof(HunterNodeType));
-    newNode->data = h;
-
-    if(list->head == NULL ){
-        list->head = newNode;
-        list->tail = newNode;
-        return;
-    }else{
-        list->tail->next = newNode;
-        list->tail = newNode;
-    }
-
+void printHunterEvidence(HunterType* h) {
+    printEvidenceList(h->evList);
 }
 
-void removeHunter(HunterListType* list, HunterType* h){
-    HunterNodeType *curr, *prev;
-
-    //Maybe edge case, but not needed I don't think
-    //We should be in control of everything
-    if(list->head->next == NULL){
-        list->head = list->tail = NULL;
-        return;
+void addHunterToRoom(RoomType* room, HunterType* h) {
+    int length = room->hunterListSize;
+    if(length >= 4) {
+        printf("\nlist is full\n");
+    } else {
+        room->hunters[length] = h;
+        room->hunterListSize++;
     }
+}
 
-    curr = list->head;
-    prev = curr;
-    
- 
-    while(curr->next != NULL){
-        if(curr->data->id == h->id){
-            //Check for updating tail
+void removeHunterFromRoom(RoomType* room, HunterType* h) {
+    int length = sizeof(room->hunters) / sizeof(HunterType*);
+    int index;
 
-            prev->next = curr->next;
-            free(curr);
+    if(length == 0) {
+        printf("\nlist is empty\n");
+    } else {
+        for(int i = 0; i < length; ++i) {
+            if(room->hunters[i]->id == h->id) {
+                index = i;
+                break;
+            }
         }
-
-        prev = curr;
-        curr = curr->next;
+        for(int i = index - 1; i < length; ++i) {
+            room->hunters[i] = room->hunters[i + 1];
+        }
+        room->hunterListSize--;
     }
 }
 
-void printHunter(HunterType* hunter) {
-    printf("room: %s, fear: %d, boredom: %d, id: %d", hunter->room->name, hunter->fear, hunter->boredom, hunter->id);
-}
+// void printHunter(HunterType* hunter) {
+//     printf("room: %s, fear: %d, boredom: %d, id: %d", hunter->room->name, hunter->fear, hunter->boredom, hunter->id);
+// }

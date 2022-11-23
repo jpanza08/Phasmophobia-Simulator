@@ -21,9 +21,17 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
     }else{
         list->tail->next = newNode;
         list->tail = newNode;
-
     }
+}
 
+void printEvidenceList(EvidenceListType* list) {
+    EvNodeType* current = list->head;
+    printf("\n");
+    while(current != NULL) {
+        printf("type: %s ", getGhostName(current->data->type));
+        current = current->next;
+    }
+    printf("\n");
 }
 
 void cleanupEvidenceList(EvidenceListType *list){
