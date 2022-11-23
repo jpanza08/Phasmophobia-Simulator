@@ -30,7 +30,7 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
 }
 
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
-    int length = sizeof(room->hunters) / sizeof(HunterType*);
+    int length = room->hunterListSize;
     int index;
 
     if(length == 0) {
