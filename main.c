@@ -10,7 +10,9 @@ int main(int argc, char *argv[])
     HunterType hunter1, hunter2, hunter3, hunter4;
     BuildingType building;
     char name1[MAX_STR], name2[MAX_STR], name3[MAX_STR], name4[MAX_STR];
+    pthread_t hunter1, hunter2, hunter3, hunter4, ghost;
     
+    //Building initialization
     initBuilding(&gh, &building);
     populateRooms(&building);
     

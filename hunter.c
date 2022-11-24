@@ -53,3 +53,4 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
 // void printHunter(HunterType* hunter) {
 //     printf("room: %s, fear: %d, boredom: %d, id: %d", hunter->room->name, hunter->fear, hunter->boredom, hunter->id);
 // }
+
