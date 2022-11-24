@@ -131,3 +131,17 @@ void printRooms(RoomListType *list){
 
 
 }
+
+void randomRoom(RoomListType *list, GhostType *ghost){
+    int stop = randInt(1,13);
+    RoomNodeType *curr = list->head;
+
+    for(int i = 1; i < 13; ++i){
+        if(i == stop){
+            ghost->currRoom = curr->data;
+            return;
+        }
+        curr = curr->next;
+    }
+
+}

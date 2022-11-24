@@ -1,11 +1,12 @@
 #include "defs.h"
 
-void initHunter(RoomType* room, EvidenceEnumType reads, int id, HunterType* h){
+void initHunter(RoomType* room, EvidenceEnumType reads, char* name, int id, HunterType* h){
     EvidenceListType* evFound = (EvidenceListType*)malloc(sizeof(EvidenceListType));
     
     h->evList = evFound;
     h->room = room;
     h->reads = reads;
+    strcpy(h->name, name);
     h->fear = 0;
     h->boredom = BOREDOM_MAX;
     h->id = id;

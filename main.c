@@ -3,37 +3,48 @@
 int main(int argc, char *argv[])
 {
     // Initialize a random seed for the random number generators
-    // srand(time(NULL));
-    // You may change this code; this is for demonstration purposes
-    // HunterType bill;
-
-    RoomType ro;
-    RoomListType roomList;
+    srand(time(NULL));
+   
+   
     GhostType gh;
-    HunterType hunter;
-    EvidenceType ev;
+    HunterType hunter1, hunter2, hunter3, hunter4;
     BuildingType building;
+    char name1[MAX_STR], name2[MAX_STR], name3[MAX_STR], name4[MAX_STR];
     
-    initGhost(&ro, POLTERGEIST, &gh);
-    // printf("%s", getGhostName(gh.type));
     initBuilding(&gh, &building);
     populateRooms(&building);
-    printRooms(building.rooms);
-    cleanupBuilding(&building);
-    // initEvidence(13.23, EMF, &ev);
-    // initRoom("Kitchen", &ro);
-    // printf("\n%s", getGhostName(ro.ghost->type));
     
-    // initHunter(&ro, EMF, 1, &hunter);
-    // addHunterToRoom(&ro, &hunter);
-    // printHunterList(&ro);
-    // addEvidenceToHunter(&hunter, &ev);
-    // printHunterEvidence(&hunter);
-    // printf("\n%f", hunter.evList->head->data->value);
-    // printf("\n%f", hunter.evList->tail->data->value);
+    //Creating ghost
+    initGhost(NULL, randInt(0,4), &gh);
+    randomRoom(building.rooms, &gh); //Giving ghost random room
 
-    // cleanupEvidenceList(hunter.evList);
-    // cleanupRoomList(&hunter.room->next);
+    
+
+    //Initializing hunters
+    printf("Enter the first Hunter's name: ");
+    scanf("%s", name1);
+    initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
+    printf("Enter the second Hunter's name: ");
+    scanf("%s", name2);
+    initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
+    printf("Enter the third Hunter's name: ");
+    scanf("%s", name3);
+    initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
+    printf("Enter the fourth Hunter's name: ");
+    scanf("%s", name4);
+    initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
+
+    addHunterToRoom(building.rooms->head->data, &hunter1);
+    addHunterToRoom(building.rooms->head->data, &hunter2);
+    addHunterToRoom(building.rooms->head->data, &hunter3);
+    addHunterToRoom(building.rooms->head->data, &hunter4);
+
+    
+
+
+    
+    cleanupBuilding(&building);
+
     
     return 0;
 }
