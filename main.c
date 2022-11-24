@@ -12,24 +12,28 @@ int main(int argc, char *argv[])
     GhostType gh;
     HunterType hunter;
     EvidenceType ev;
+    BuildingType building;
     
-    initEvidence(13.23, EMF, &ev);
     initGhost(&ro, POLTERGEIST, &gh);
     printf("%s", getGhostName(gh.type));
-    initRoom("Kitchen", &gh, &ro);
-    printf("\n%s", getGhostName(ro.ghost->type));
+    initBuilding(&gh, &building);
+    populateRooms(&building);
+    cleanupBuilding(&building);
+    // initEvidence(13.23, EMF, &ev);
+    // initRoom("Kitchen", &ro);
+    // printf("\n%s", getGhostName(ro.ghost->type));
     
-    initHunter(&ro, EMF, 1, &hunter);
-    addHunterToRoom(&ro, &hunter);
-    printHunterList(&ro);
-    addEvidenceToHunter(&hunter, &ev);
-    printHunterEvidence(&hunter);
-    printf("\n%f", hunter.evList->head->data->value);
-    printf("\n%f", hunter.evList->tail->data->value);
+    // initHunter(&ro, EMF, 1, &hunter);
+    // addHunterToRoom(&ro, &hunter);
+    // printHunterList(&ro);
+    // addEvidenceToHunter(&hunter, &ev);
+    // printHunterEvidence(&hunter);
+    // printf("\n%f", hunter.evList->head->data->value);
+    // printf("\n%f", hunter.evList->tail->data->value);
 
-    cleanupEvidenceList(hunter.evList);
+    // cleanupEvidenceList(hunter.evList);
     // cleanupRoomList(&hunter.room->next);
-
+    
     return 0;
 }
 

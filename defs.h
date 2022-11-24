@@ -45,6 +45,13 @@ typedef struct HunterType {
   int id;
 } HunterType;
 
+typedef struct BuildingType {
+  GhostType *ghost;
+  HunterType* hunters[4];
+  struct RoomListType* rooms;
+  int hunterListSize;
+}BuildingType;
+
 typedef struct EvidenceType{
   float value;
   EvidenceEnumType type;
@@ -93,10 +100,12 @@ void printEvidenceList(EvidenceListType*);
 const char* getEvidenceName(EvidenceEnumType);
 
 
-void initRoom(char*, GhostType*, RoomType*);
-void initRoomList(RoomListType* arr);
-void addListRoom(RoomListType* list, RoomType* room);
-void cleanupRoomList(RoomListType* list);
+void initRoom(RoomType*, char*);
+void initRoomList(RoomListType*);
+void appendRoom(RoomListType*, RoomType*);
+void connectRooms(RoomType*, RoomType*);
+void cleanupRoomList(RoomListType*);
+void cleanupRoomData(RoomListType*);
 void printHunterList(RoomType*);
 
 
@@ -108,3 +117,8 @@ void addHunterToRoom(RoomType*, HunterType*);
 void addEvidenceToHunter(HunterType*, EvidenceType*);
 void removeHunterFromRoom(RoomType*, HunterType*);
 void printHunterEvidence(HunterType*);
+
+void initBuilding(GhostType*, BuildingType*);
+void addHunterToBuilding(HunterType*, BuildingType*);
+void populateRooms(BuildingType*);
+void cleanupBuilding(BuildingType*);

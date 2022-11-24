@@ -1,6 +1,6 @@
 #include "defs.h"
 
-void initRoom(char* name, GhostType* ghost, RoomType* room){
+void initRoom(RoomType* room, char* name){
     RoomListType* roomList = (RoomListType*)malloc(sizeof(RoomListType));
     EvidenceListType* evList = (EvidenceListType*)malloc(sizeof(EvidenceListType));
 
@@ -9,7 +9,7 @@ void initRoom(char* name, GhostType* ghost, RoomType* room){
     initEvidenceList(evList);
     room->evidence = evList;
     room->next = roomList;
-    room->ghost = ghost;
+    room->ghost = NULL;
     room->hunterListSize = 0;
 }
 
@@ -18,7 +18,7 @@ void initRoomList(RoomListType* list){
     list->tail = NULL;
 }
 
-void addListRoom(RoomListType *list, RoomType *room){
+void appendRoom(RoomListType *list, RoomType *room){
     RoomNodeType* newNode = (RoomNodeType*) malloc(sizeof(RoomNodeType));
     newNode->data = room;
 
@@ -30,6 +30,12 @@ void addListRoom(RoomListType *list, RoomType *room){
         list->tail->next = newNode;
         list->tail = newNode;
     }
+}
+
+void connectRooms(RoomType *r1, RoomType* r2){
+    appendRoom(r1->next, r2);
+    appendRoom(r2->next, r1);
+
 }
 
 void printHunterList(RoomType* room) {
@@ -45,27 +51,38 @@ void printHunterList(RoomType* room) {
     }
 }
 
+//Frees neighbor lists of rooms first
+void cleanupRoomData(RoomListType* list){
+    RoomNodeType *curr, *next;
+
+    curr = list->head;
+    next = curr->next;
+
+    while(curr->next != NULL){
+        free(curr);
+        curr = next;
+        next = curr->next;
+
+    }
+
+    //TODO: Fix memory leaks
+}
 
 void cleanupRoomList(RoomListType *list){
     RoomNodeType *curr, *next;
-    
-    if(list->head == NULL)
-        return;
-    if(list->head == list->tail){
-        free(list->head);
-        return;
-    }
-
     curr = list->head;
-    next = curr;
-    
+    next = curr->next;
+
     while(curr->next != NULL){
-        next = curr->next;
+        cleanupRoomData(curr->data->next);
+        //TODO: Seg fault in trying to cleanup a room's neighbors linked list. Just the nodes
         free(curr);
         curr = next;
-
+        next = curr->next;
+        
     }
-
-    free(curr);
+    
+    
+    
 }
 
