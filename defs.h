@@ -28,7 +28,7 @@ typedef struct {
 } GhostType;
 
 typedef struct RoomType {
-  char name[MAX_STR]; // good
+  char name[MAX_STR];
   GhostType* ghost;
   struct RoomListType* next;
   struct EvidenceListType* evidence;
@@ -43,6 +43,7 @@ typedef struct HunterType {
   int fear;
   int boredom;
   int id;
+  //TODO: Hunter name
 } HunterType;
 
 typedef struct BuildingType {
@@ -103,6 +104,8 @@ const char* getEvidenceName(EvidenceEnumType);
 void initRoom(RoomType*, char*);
 void initRoomList(RoomListType*);
 void appendRoom(RoomListType*, RoomType*);
+void addNieghbour(RoomListType*, RoomType*);
+void printRooms(RoomListType*);
 void connectRooms(RoomType*, RoomType*);
 void cleanupRoomList(RoomListType*);
 void cleanupRoomData(RoomListType*);

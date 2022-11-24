@@ -15,9 +15,10 @@ int main(int argc, char *argv[])
     BuildingType building;
     
     initGhost(&ro, POLTERGEIST, &gh);
-    printf("%s", getGhostName(gh.type));
+    // printf("%s", getGhostName(gh.type));
     initBuilding(&gh, &building);
     populateRooms(&building);
+    printRooms(building.rooms);
     cleanupBuilding(&building);
     // initEvidence(13.23, EMF, &ev);
     // initRoom("Kitchen", &ro);

@@ -26,11 +26,22 @@ void appendRoom(RoomListType *list, RoomType *room){
     if(list->head == NULL){
         list->head = newNode;
         list->tail = newNode;
-    } else {
+    }else{
         list->tail->next = newNode;
         list->tail = newNode;
     }
 }
+
+// void addNeighbour(RoomListType *list, RoomType *r2){
+//     if(list->head == NULL){
+//         list->head = r2;
+//         list->tail = r2;
+//     } else {
+//         list->tail->next = r2;
+//         list->tail = r2;
+//     }
+
+// }
 
 void connectRooms(RoomType *r1, RoomType* r2){
     appendRoom(r1->next, r2);
@@ -59,30 +70,64 @@ void cleanupRoomData(RoomListType* list){
     next = curr->next;
 
     while(curr->next != NULL){
+        
         free(curr);
         curr = next;
         next = curr->next;
 
     }
-
-    //TODO: Fix memory leaks
+    free(curr);
+    
 }
 
 void cleanupRoomList(RoomListType *list){
     RoomNodeType *curr, *next;
+
     curr = list->head;
     next = curr->next;
 
     while(curr->next != NULL){
         cleanupRoomData(curr->data->next);
-        //TODO: Seg fault in trying to cleanup a room's neighbors linked list. Just the nodes
-        free(curr);
         curr = next;
         next = curr->next;
         
     }
+
+    cleanupRoomData(curr->data->next);
+
+    curr = list->head;
+    next = curr->next;
     
-    
+    while(curr->next != NULL){
+        free(curr->data->next);
+        free(curr->data->evidence);
+        free(curr->data);
+        free(curr);
+        curr = next;
+        next = curr->next;
+
+    }
+    free(curr->data->next);
+    free(curr->data->evidence);
+    free(curr->data);
+    free(curr);
+    free(list);
     
 }
 
+void printRooms(RoomListType *list){
+    RoomNodeType *curr, *next;
+
+    curr = list->head;
+    next = curr->next;
+    while(curr->next != NULL){
+        printf("\n%s", curr->data->name);
+        curr = next;
+        next = curr->next;
+        
+    }
+    printf("\n%s", curr->data->name);
+
+
+
+}

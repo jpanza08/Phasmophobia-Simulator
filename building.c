@@ -34,12 +34,6 @@ void addHunterToBuilding(HunterType* hunter, BuildingType* b){
 }
 
 void cleanupBuilding(BuildingType* building){
-    // RoomNodeType *current = building->rooms->head;
-    
-    // while(current.next != NULL){
-        
-
-    // }
     cleanupRoomList(building->rooms);
 
 
@@ -93,54 +87,12 @@ void populateRooms(BuildingType* building) {
     appendRoom(building->rooms, garage);
     appendRoom(building->rooms, utility_room);
 
-    //  = &roomList;
-    
-    // RoomNodeType* van_node = calloc(1, sizeof(RoomNodeType));
-    // van_node->data = van;
-    // RoomNodeType* hallway_node = calloc(1, sizeof(RoomNodeType));
-    // hallway_node->data = hallway;
-    // RoomNodeType* master_bedroom_node = calloc(1, sizeof(RoomNodeType));
-    // master_bedroom_node->data = master_bedroom;
-    // RoomNodeType* boys_bedroom_node = calloc(1, sizeof(RoomNodeType));
-    // boys_bedroom_node->data = boys_bedroom;
-    // RoomNodeType* bathroom_node = calloc(1, sizeof(RoomNodeType));
-    // bathroom_node->data = bathroom;
-    // RoomNodeType* basement_node = calloc(1, sizeof(RoomNodeType));
-    // basement_node->data = basement;
-    // RoomNodeType* basement_hallway_node = calloc(1, sizeof(RoomNodeType));
-    // basement_hallway_node->data = basement_hallway;
-    // RoomNodeType* right_storage_room_node = calloc(1, sizeof(RoomNodeType));
-    // right_storage_room_node->data = right_storage_room;
-    // RoomNodeType* left_storage_room_node = calloc(1, sizeof(RoomNodeType));
-    // left_storage_room_node->data = left_storage_room;
-    // RoomNodeType* kitchen_node = calloc(1, sizeof(RoomNodeType));
-    // kitchen_node->data = kitchen;
-    // RoomNodeType* living_room_node = calloc(1, sizeof(RoomNodeType));
-    // living_room_node->data = living_room;
-    // RoomNodeType* garage_node = calloc(1, sizeof(RoomNodeType));
-    // garage_node->data = garage;
-    // RoomNodeType* utility_room_node = calloc(1, sizeof(RoomNodeType));
-    // utility_room_node->data = utility_room;
-
 //     // Building->rooms might be a linked list structre, or maybe just a node.
-//     initRoomList(&building->rooms);
-
-    // appendRoom(building->rooms, van_node);
-    // appendRoom(building->rooms, hallway_node);
-    // appendRoom(building->rooms, master_bedroom_node);
-    // appendRoom(building->rooms, boys_bedroom_node);
-    // appendRoom(building->rooms, bathroom_node);
-    // appendRoom(building->rooms, basement_node);
-    // appendRoom(building->rooms, basement_hallway_node);
-    // appendRoom(building->rooms, right_storage_room_node);
-    // appendRoom(building->rooms, left_storage_room_node);
-    // appendRoom(building->rooms, kitchen_node);
-    // appendRoom(building->rooms, living_room_node);
-    // appendRoom(building->rooms, garage_node);
-    // appendRoom(building->rooms, utility_room_node);
 
 //     // Now connect the rooms. It is possible you do not need a separate
 //     // function for this, but it is provided to give you a starting point.
+   
+   
     connectRooms(van, hallway);
     connectRooms(hallway, master_bedroom);
     connectRooms(hallway, boys_bedroom);
