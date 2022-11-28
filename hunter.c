@@ -78,6 +78,8 @@ void cleanupHunters(HunterType* hunters){
 */
 void* chooseAction(void* hunterArg){
     //Need to cast void pointer into something usable
-    HunterType* hunter = (HunterType*) hunterArg;
+    HunterType* hunter = (HunterType*) hunterArg;  
+
+    /* Get random number and choose action*/
 
 }

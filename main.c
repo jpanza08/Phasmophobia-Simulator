@@ -5,7 +5,6 @@ int main(int argc, char *argv[])
     // Initialize a random seed for the random number generators
     srand(time(NULL));
    
-   
     GhostType gh;
     HunterType hunter1, hunter2, hunter3, hunter4;
     BuildingType building;
@@ -49,7 +48,12 @@ int main(int argc, char *argv[])
     addHunterToRoom(building.rooms->head->data, &hunter4);
 
 
-    //Cleaning it up anyway
+
+
+
+
+
+    //Cleanup stuff
     pthread_join(hunter1Thread, NULL);
     pthread_join(hunter2Thread, NULL);
     pthread_join(hunter3Thread, NULL);
