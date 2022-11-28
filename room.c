@@ -104,9 +104,8 @@ void cleanupRoomData(RoomListType* list){
       out:   updated roomlist
 */
 void cleanupRoomList(RoomListType *list){
-    RoomNodeType *curr, *next;
-    curr = list->head;
-    next = curr->next;
+    RoomNodeType *curr = list->head;
+    RoomNodeType *next = curr->next;
     while(curr->next != NULL){
         cleanupRoomData(curr->data->next);
         curr = next;

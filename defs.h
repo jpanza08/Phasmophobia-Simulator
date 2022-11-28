@@ -114,14 +114,17 @@ void randomRoom(RoomListType *list, GhostType *ghost);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
+void* chooseGhostAction(void*);
 
 void initHunter(RoomType*, EvidenceEnumType, char*, int, HunterType*);
 void addHunterToRoom(RoomType*, HunterType*);
 void addEvidenceToHunter(HunterType*, EvidenceType*);
 void removeHunterFromRoom(RoomType*, HunterType*);
 void printHunterEvidence(HunterType*);
+void cleanupHunters(HunterType*);
 
 void initBuilding(GhostType*, BuildingType*);
 void addHunterToBuilding(HunterType*, BuildingType*);
 void populateRooms(BuildingType*);
 void cleanupBuilding(BuildingType*);
+void* chooseAction(void*);

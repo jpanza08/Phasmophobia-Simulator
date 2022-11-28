@@ -62,3 +62,22 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
         room->hunterListSize--;
     }
 }
+
+void cleanupHunters(HunterType* hunters){
+    for(int i = 0; i < 4; ++i){
+        free(hunters[i].evList);
+    }
+
+}
+
+
+/*
+ Function:   chooseAction
+  Purpose:   functions for threads to decide what the hunter will do.
+       in:   hunter
+*/
+void* chooseAction(void* hunterArg){
+    //Need to cast void pointer into something usable
+    HunterType* hunter = (HunterType*) hunterArg;
+
+}

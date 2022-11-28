@@ -39,6 +39,7 @@ void addHunterToBuilding(HunterType* hunter, BuildingType* b){
 */
 void cleanupBuilding(BuildingType* building){
     cleanupRoomList(building->rooms);
+    // cleanupHunters(*building->hunters);
 }
 
 

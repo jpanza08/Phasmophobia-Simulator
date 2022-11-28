@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     HunterType hunter1, hunter2, hunter3, hunter4;
     BuildingType building;
     char name1[MAX_STR], name2[MAX_STR], name3[MAX_STR], name4[MAX_STR];
-    pthread_t hunter1, hunter2, hunter3, hunter4, ghost;
+    pthread_t hunter1Thread, hunter2Thread, hunter3Thread, hunter4Thread, ghostThread;
     
     //Building initialization
     initBuilding(&gh, &building);
@@ -18,33 +18,48 @@ int main(int argc, char *argv[])
     
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
+    pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
     randomRoom(building.rooms, &gh); //Giving ghost random room
-
-    
 
     //Initializing hunters
     printf("Enter the first Hunter's name: ");
     scanf("%s", name1);
     initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
+    pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
+    
     printf("Enter the second Hunter's name: ");
     scanf("%s", name2);
     initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
+    pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
+    
     printf("Enter the third Hunter's name: ");
     scanf("%s", name3);
     initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
+    pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
+    
     printf("Enter the fourth Hunter's name: ");
     scanf("%s", name4);
     initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
-
+    pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
+    
+    //Adding hunters to rooms
     addHunterToRoom(building.rooms->head->data, &hunter1);
     addHunterToRoom(building.rooms->head->data, &hunter2);
     addHunterToRoom(building.rooms->head->data, &hunter3);
     addHunterToRoom(building.rooms->head->data, &hunter4);
 
-    
 
-
-    
+    //Cleaning it up anyway
+    pthread_join(hunter1Thread, NULL);
+    pthread_join(hunter2Thread, NULL);
+    pthread_join(hunter3Thread, NULL);
+    pthread_join(hunter4Thread, NULL);
+    pthread_join(ghostThread, NULL);
+    //Maybe make a function for this
+    free(hunter1.evList);
+    free(hunter2.evList);
+    free(hunter3.evList);
+    free(hunter4.evList);
     cleanupBuilding(&building);
 
     

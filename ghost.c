@@ -20,3 +20,10 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
     ghost->currRoom = startRoom;
     ghost->type = type;
 }
+
+void* chooseGhostAction(void* ghostArg){
+    //Need to cast void pointer into something usable
+    GhostType* ghost = (GhostType*) ghostArg;
+
+
+}
