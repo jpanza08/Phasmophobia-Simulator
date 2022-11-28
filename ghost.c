@@ -1,6 +1,11 @@
 #include "defs.h"
 
-
+/*
+ Function:   getGhostName
+  Purpose:   gets ghostname in string
+       in:   ghost enum type
+      out:   string of enum
+*/
 const char* getGhostName(GhostEnumType name) {
     switch(name) {
         case POLTERGEIST: return "POLTERGEIST";

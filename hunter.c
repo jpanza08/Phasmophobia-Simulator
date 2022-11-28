@@ -20,6 +20,13 @@ void printHunterEvidence(HunterType* h) {
     printEvidenceList(h->evList);
 }
 
+/*
+ Function:   addHunterToRoom
+  Purpose:   add hunter to a room
+       in:   hunter
+       in:   room
+      out:   updated room with hunter
+*/
 void addHunterToRoom(RoomType* room, HunterType* h) {
     int length = room->hunterListSize;
     if(length >= 4) {
@@ -30,10 +37,16 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
     }
 }
 
+/*
+ Function:   removeHunterFromRoom
+  Purpose:   remove hunter from a room
+       in:   hunter
+       in:   room
+      out:   updated room without hunter
+*/
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
     int length = room->hunterListSize;
     int index;
-
     if(length == 0) {
         printf("\nlist is empty\n");
     } else {
@@ -49,8 +62,3 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
         room->hunterListSize--;
     }
 }
-
-// void printHunter(HunterType* hunter) {
-//     printf("room: %s, fear: %d, boredom: %d, id: %d", hunter->room->name, hunter->fear, hunter->boredom, hunter->id);
-// }
-

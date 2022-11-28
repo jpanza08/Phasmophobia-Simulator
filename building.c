@@ -24,19 +24,21 @@ void initBuilding(GhostType *ghost,BuildingType *b){
     b->ghost = ghost;
     b->rooms = roomList;
     b->hunterListSize = 0;
-
 }
 
 void addHunterToBuilding(HunterType* hunter, BuildingType* b){
     b->hunters[b->hunterListSize] = hunter;
     b->hunterListSize++;
-
 }
 
+/*
+ Function:   cleanupBuilding
+  Purpose:   deallocates memory used by building
+       in:   building
+      out:   updated building
+*/
 void cleanupBuilding(BuildingType* building){
     cleanupRoomList(building->rooms);
-
-
 }
 
 

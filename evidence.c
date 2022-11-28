@@ -1,6 +1,11 @@
 #include "defs.h"
 
-
+/*
+ Function:   getEvidenceName
+  Purpose:   gets EvidenceName in string
+       in:   Evidence enum type
+      out:   string of enum
+*/
 const char* getEvidenceName(EvidenceEnumType name) {
     switch(name) {
         case EMF: return "EMF";
@@ -20,11 +25,16 @@ void initEvidenceList(EvidenceListType *list){
     list->tail = NULL;
 }
 
+/*
+ Function:   addEvidence
+  Purpose:   adds a evidence to a evidencelist
+       in:   evidencelist
+       in:   evidence
+      out:   updated evidencelist for evidence
+*/
 void addEvidence(EvidenceListType *list, EvidenceType *ev){
     EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
-
-    //Empty
     if(list->head == NULL){
         list->head = newNode;
         list->tail = newNode;
@@ -44,23 +54,24 @@ void printEvidenceList(EvidenceListType* list) {
     printf("\n");
 }
 
+/*
+ Function:   cleanupEvidenceList
+  Purpose:   deallocates memory used by EvidenceList
+       in:   EvidenceList
+      out:   updated EvidenceList
+*/
 void cleanupEvidenceList(EvidenceListType *list){
     EvNodeType *curr;
-    
     if(list->head == NULL)
         return;
     if(list->head == list->tail){
         free(list->head);
         return;
     }
-
     curr = list->head;
-    
     while(curr->next != NULL){
         free(curr);
         curr = curr->next;
-
     }
     free(curr);
-
 }
