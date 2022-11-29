@@ -114,6 +114,7 @@ void randomRoom(RoomListType *list, GhostType *ghost);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
+void leaveEvidence(RoomType*, GhostType*);
 void* chooseGhostAction(void*);
 
 void initHunter(RoomType*, EvidenceEnumType, char*, int, HunterType*);

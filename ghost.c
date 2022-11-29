@@ -21,23 +21,51 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
     ghost->type = type;
 }
 
+void leaveEvidence(RoomType* room, GhostType* ghost) {
+    EvidenceType evLeft;
+    float evRange;
+    int randomint = randInt(1, 4);
+    EvidenceEnumType gt = randomint;
+
+    switch(gt) {
+        case EMF:
+            evRange = randFloat(0, 5);
+            break;
+        case TEMPERATURE:
+            evRange = randFloat(-10, 27);
+            break;
+        case FINGERPRINTS:
+            evRange = randFloat(0, 1);
+            break;
+        case SOUND:
+            evRange = randFloat(40, 75);
+            break;
+    }
+    initEvidence(evRange, gt, &evLeft);
+    addEvidence(room->evidence, &evLeft);
+}
+
 void* chooseGhostAction(void* ghostArg){
-    //Need to cast void pointer into something usable
     GhostType* ghost = (GhostType*) ghostArg;
+    int random;
 
     while(1){
-
         if(ghost->currRoom->hunterListSize != 0){
-
-            ghost->boredom = BOREDOM_MAX;
-            //Can't move
-            
-            //Leave evidence or do nothing
-
-
-        }else{
+            ghost->boredom = BOREDOM_MAX;            
+            random = randInt(1, 3);
+            if(random == 1) {
+                leaveEvidence(ghost->currRoom, ghost);
+            }
+        } else {
             ghost->boredom--;
-
+            random = randInt(1, 4);
+            switch(random) {
+                case 1:
+                    leaveEvidence(ghost->currRoom, ghost);
+                    break;
+                case 2:
+                    //josh add moveRoom function
+            }
             //Randomly choose to leave, drop evi, or do nothing.
                 //If moving rooms, update ghost room pointer and room ghost pointer.
                 //If leaving evidence, make new evi structure and add it to room's evidence
@@ -46,13 +74,8 @@ void* chooseGhostAction(void* ghostArg){
 
 
         }
-
         if(ghost->boredom <= 0)
             break; //How to break a thread?
-    
-        
-
     }
-
-
+    pthread_exit(NULL);
 }
