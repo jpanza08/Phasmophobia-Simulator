@@ -73,6 +73,7 @@ typedef struct EvidenceNode {
 typedef struct RoomListType{
   RoomNodeType *head;
   RoomNodeType *tail;
+  int size;
 } RoomListType;
 
 typedef struct EvidenceListType{
@@ -110,12 +111,13 @@ void connectRooms(RoomType*, RoomType*);
 void cleanupRoomList(RoomListType*);
 void cleanupRoomData(RoomListType*);
 void printHunterList(RoomType*);
-void randomRoom(RoomListType *list, GhostType *ghost);
+void randomRoom(RoomListType*, GhostType*, int);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
 void leaveEvidence(RoomType*, GhostType*);
 void* chooseGhostAction(void*);
+void switchRooms(GhostType*);
 
 void initHunter(RoomType*, EvidenceEnumType, char*, int, HunterType*);
 void addHunterToRoom(RoomType*, HunterType*);

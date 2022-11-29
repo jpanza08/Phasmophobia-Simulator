@@ -79,3 +79,11 @@ void* chooseGhostAction(void* ghostArg){
     }
     pthread_exit(NULL);
 }
+
+
+void switchRooms(GhostType* ghost){
+    RoomType* oldRoom = ghost->currRoom;
+    randomRoom(ghost->currRoom->next, ghost, 1);
+    oldRoom->ghost = NULL;
+
+}

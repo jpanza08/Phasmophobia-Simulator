@@ -16,6 +16,7 @@ void initRoom(RoomType* room, char* name){
 void initRoomList(RoomListType* list){
     list->head = NULL;
     list->tail = NULL;
+    list->size = 0;
 }
 
 /*
@@ -37,6 +38,7 @@ void appendRoom(RoomListType *list, RoomType *room){
         list->tail->next = newNode;
         list->tail = newNode;
     }
+   list->size++;
 }
 
 // void addNeighbour(RoomListType *list, RoomType *r2){
@@ -144,19 +146,38 @@ void printRooms(RoomListType *list){
 
 /*
  Function:   randomRoom
-  Purpose:   picks a random room for the ghost to spawn in (excluding van)
-       in:   room list
-       in:   ghost
-      out:   updated random room with ghost in it
+  Purpose:   picks a random room for the ghost to spawn in (excludes van if the van parameter is set to 0)
+   in/out:   room list to traverse, where one room is change to have ghost in it
+   in/out:   ghost to be added to room and have room added to it
+       in:   flag for whether or not the van is included in the rooms (0 if not, 1 if yes) 
 */
-void randomRoom(RoomListType *list, GhostType *ghost){
-    int stop = randInt(1,13);
+void randomRoom(RoomListType *list, GhostType *ghost, int van){
+    if(!van){
+    int stop = randInt(1, list->size);
     RoomNodeType *curr = list->head;
-    for(int i = 1; i < 13; ++i){
+    for(int i = 1; i < list->size; ++i){
         if(i == stop){
             ghost->currRoom = curr->data;
+            curr->data->ghost = ghost;
             return;
         }
         curr = curr->next;
+    }
+    }else{
+    while(1){    
+        int stop = randInt(0,list->size);
+        RoomNodeType *curr = list->head;
+        for(int i = 0; i < list->size; ++i){
+            if(i == stop){
+                if(!(curr->data == ghost->currRoom)){
+                    ghost->currRoom = curr->data;
+                    curr->data->ghost = ghost;
+                    return;
+                }
+                continue;
+            }
+            curr = curr->next;
+        }
+    }
     }
 }

@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
     pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
-    randomRoom(building.rooms, &gh); //Giving ghost random room
+    randomRoom(building.rooms, &gh, 0); //Giving ghost random room
 
     //Initializing hunters
     printf("Enter the first Hunter's name: ");
@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
     addHunterToRoom(building.rooms->head->data, &hunter3);
     addHunterToRoom(building.rooms->head->data, &hunter4);
 
+    printf("Start Room: %s\n", gh.currRoom->name);
+    switchRooms(&gh);
+    printf("End Room: %s\n", gh.currRoom->name);
 
 
 
