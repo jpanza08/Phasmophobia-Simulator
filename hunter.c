@@ -70,6 +70,37 @@ void cleanupHunters(HunterType* hunters){
 
 }
 
+void randomRoomHunter(RoomListType *list, HunterType *hunter){
+    while(1){    
+            int stop = randInt(0,list->size);
+            RoomNodeType *curr = list->head;
+            for(int i = 0; i < list->size; ++i){
+                if(i == stop){
+                    if(!(curr->data == hunter->room)){
+                        hunter->room = curr->data;
+                        addHunterToRoom(curr->data, hunter);
+                        return;
+                    }
+                    continue;
+                }
+                curr = curr->next;
+            }
+        }
+
+}
+
+
+void switchRoomsHunter(HunterType *hunter){
+    removeHunterFromRoom(hunter->room, hunter);
+    randomRoomHunter(hunter->room->next, hunter);
+
+}
+
+void collectEvidence(HunterType *hunter){
+
+
+
+}
 
 /*
  Function:   chooseAction
@@ -79,7 +110,40 @@ void cleanupHunters(HunterType* hunters){
 void* chooseAction(void* hunterArg){
     //Need to cast void pointer into something usable
     HunterType* hunter = (HunterType*) hunterArg;  
+    int random;
+    //Make share evi function
 
-    /* Get random number and choose action*/
+    while(1){
+
+        if(hunter->room->ghost != NULL){
+            hunter->fear++;
+            hunter->boredom = BOREDOM_MAX;
+
+            if(hunter->room->hunterListSize > 1){
+                //TODO: Share evidence
+            }else{
+                random = randInt(1, 3);
+                
+                switch(random){
+                    case(1): 
+                        collectEvidence(hunter);
+                    case(2):
+                        switchRoomsHunter(hunter);
+                        hunter->boredom--;
+                }
+            }
+        }
+
+        if(hunter->evList->size >= 3){
+            break;
+        } 
+        if(hunter->fear >= 100){
+            break;
+        }
+        if(hunter->boredom <= 0){
+            break;
+        }
+    }
+   pthread_exit(NULL);
 
 }

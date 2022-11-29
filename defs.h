@@ -79,6 +79,7 @@ typedef struct RoomListType{
 typedef struct EvidenceListType{
   EvNodeType *head;
   EvNodeType *tail;
+  int size;
 } EvidenceListType;
 
 
@@ -112,6 +113,7 @@ void cleanupRoomList(RoomListType*);
 void cleanupRoomData(RoomListType*);
 void printHunterList(RoomType*);
 void randomRoom(RoomListType*, GhostType*, int);
+void randomRoomHunter(RoomListType*, HunterType*);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
@@ -125,9 +127,12 @@ void addEvidenceToHunter(HunterType*, EvidenceType*);
 void removeHunterFromRoom(RoomType*, HunterType*);
 void printHunterEvidence(HunterType*);
 void cleanupHunters(HunterType*);
+void switchRoomsHunter(HunterType*);
+void collectEvidence(HunterType*);
 
 void initBuilding(GhostType*, BuildingType*);
 void addHunterToBuilding(HunterType*, BuildingType*);
 void populateRooms(BuildingType*);
 void cleanupBuilding(BuildingType*);
 void* chooseAction(void*);
+void scaredHunters(BuildingType*);

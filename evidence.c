@@ -23,6 +23,7 @@ void initEvidence(float value, EvidenceEnumType reading, EvidenceType* ev) {
 void initEvidenceList(EvidenceListType *list){
     list->head = NULL;
     list->tail = NULL;
+    list->size = 0;
 }
 
 /*
@@ -38,9 +39,11 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
     if(list->head == NULL){
         list->head = newNode;
         list->tail = newNode;
+        list->size++;
     }else{
         list->tail->next = newNode;
         list->tail = newNode;
+        list->size++;
     }
 }
 

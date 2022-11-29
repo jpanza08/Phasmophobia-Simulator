@@ -47,21 +47,18 @@ int main(int argc, char *argv[])
     addHunterToRoom(building.rooms->head->data, &hunter3);
     addHunterToRoom(building.rooms->head->data, &hunter4);
 
-    printf("Start Room: %s\n", gh.currRoom->name);
-    switchRooms(&gh);
-    printf("End Room: %s\n", gh.currRoom->name);
-
-
-
-
-
-
+    
     //Cleanup stuff
     pthread_join(hunter1Thread, NULL);
     pthread_join(hunter2Thread, NULL);
     pthread_join(hunter3Thread, NULL);
     pthread_join(hunter4Thread, NULL);
     pthread_join(ghostThread, NULL);
+
+    //Threads finished, print results
+    scaredHunters(&building);
+
+    
     //Maybe make a function for this
     free(hunter1.evList);
     free(hunter2.evList);

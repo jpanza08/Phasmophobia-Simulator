@@ -42,8 +42,6 @@ void cleanupBuilding(BuildingType* building){
     // cleanupHunters(*building->hunters);
 }
 
-
-
 void populateRooms(BuildingType* building) {
     // First, create each room. Perhaps you want to include more data 
     // in the init parameters?
@@ -108,4 +106,15 @@ void populateRooms(BuildingType* building) {
     connectRooms(kitchen, living_room);
     connectRooms(kitchen, garage);
     connectRooms(garage, utility_room);
+}
+
+void scaredHunters(BuildingType *b){
+    printf("Hunters with who got too scared:");
+    for(int i = 0; i < 4; ++i){
+        if(b->hunters[i]->fear >= 100){
+            printf(" %s ", b->hunters[i]->name);
+        }
+    }
+
+
 }
