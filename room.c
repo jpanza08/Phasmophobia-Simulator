@@ -118,6 +118,7 @@ void cleanupRoomList(RoomListType *list){
     next = curr->next;
     while(curr->next != NULL){
         free(curr->data->next);
+        cleanupEvidenceList(curr->data->evidence);
         free(curr->data->evidence);
         free(curr->data);
         free(curr);
@@ -126,6 +127,7 @@ void cleanupRoomList(RoomListType *list){
 
     }
     free(curr->data->next);
+    cleanupEvidenceList(curr->data->evidence);
     free(curr->data->evidence);
     free(curr->data);
     free(curr);
@@ -164,20 +166,20 @@ void randomRoom(RoomListType *list, GhostType *ghost, int van){
         curr = curr->next;
     }
     }else{
-    while(1){    
-        int stop = randInt(0,list->size);
-        RoomNodeType *curr = list->head;
-        for(int i = 0; i < list->size; ++i){
-            if(i == stop){
-                if(!(curr->data == ghost->currRoom)){
-                    ghost->currRoom = curr->data;
-                    curr->data->ghost = ghost;
-                    return;
+        while(1){    
+            int stop = randInt(0,list->size);
+            RoomNodeType *curr = list->head;
+            for(int i = 0; i < list->size; ++i){
+                if(i == stop){
+                    if(!(curr->data == ghost->currRoom)){
+                        ghost->currRoom = curr->data;
+                        curr->data->ghost = ghost;
+                        return;
+                    }
+                    continue;
                 }
-                continue;
+                curr = curr->next;
             }
-            curr = curr->next;
         }
-    }
     }
 }

@@ -61,7 +61,7 @@ void printEvidenceList(EvidenceListType* list) {
       out:   updated EvidenceList
 */
 void cleanupEvidenceList(EvidenceListType *list){
-    EvNodeType *curr;
+    EvNodeType *curr, *next;
     if(list->head == NULL)
         return;
     if(list->head == list->tail){
@@ -69,9 +69,11 @@ void cleanupEvidenceList(EvidenceListType *list){
         return;
     }
     curr = list->head;
+    next = curr->next;
     while(curr->next != NULL){
         free(curr);
-        curr = curr->next;
+        curr = next;
+        next = curr->next;
     }
     free(curr);
 }

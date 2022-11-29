@@ -24,9 +24,8 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
 void leaveEvidence(RoomType* room, GhostType* ghost) {
     EvidenceType evLeft;
     float evRange;
-    int randomint = randInt(1, 4);
+    int randomint = randInt(1, 3);
     EvidenceEnumType gt = randomint;
-
     switch(gt) {
         case EMF:
             evRange = randFloat(0, 5);
@@ -64,26 +63,27 @@ void* chooseGhostAction(void* ghostArg){
                     leaveEvidence(ghost->currRoom, ghost);
                     break;
                 case 2:
-                    //josh add moveRoom function
+                    switchRooms(ghost);
+                    break;
             }
             //Randomly choose to leave, drop evi, or do nothing.
                 //If moving rooms, update ghost room pointer and room ghost pointer.
                 //If leaving evidence, make new evi structure and add it to room's evidence
                     //Randomly select evidence type based on ghost type.
                     //Randomly generate value within evidence range
-
+        
 
         }
         if(ghost->boredom <= 0)
-            break; //How to break a thread?
+            break;
     }
     pthread_exit(NULL);
 }
 
 
 void switchRooms(GhostType* ghost){
-    RoomType* oldRoom = ghost->currRoom;
+    ghost->currRoom->ghost = NULL;
     randomRoom(ghost->currRoom->next, ghost, 1);
-    oldRoom->ghost = NULL;
+    
 
 }
