@@ -41,16 +41,6 @@ void appendRoom(RoomListType *list, RoomType *room){
    list->size++;
 }
 
-// void addNeighbour(RoomListType *list, RoomType *r2){
-//     if(list->head == NULL){
-//         list->head = r2;
-//         list->tail = r2;
-//     } else {
-//         list->tail->next = r2;
-//         list->tail = r2;
-//     }
-// }
-
 /*
  Function:   connectRooms
   Purpose:   connects two rooms together

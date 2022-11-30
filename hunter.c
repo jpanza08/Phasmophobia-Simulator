@@ -10,6 +10,7 @@ void initHunter(RoomType* room, EvidenceEnumType reads, char* name, int id, Hunt
     h->fear = 0;
     h->boredom = BOREDOM_MAX;
     h->id = id;
+    h->ghostlyEvidence = 0;
 }
 
 void addEvidenceToHunter(HunterType* h, EvidenceType* ev) {
@@ -105,8 +106,28 @@ void collectEvidence(HunterType *hunter){
     if(hunter->room->evidence->size != 0) {
         EvNodeType* current = hunter->room->evidence->head;
         while(current != NULL) {
-            addEvidenceToHunter(hunter, current->data);
-            current = current->next;
+            if(current->data->type == hunter->reads){
+                addEvidenceToHunter(hunter, current->data);
+                switch(current->data->type){
+                    case(EMF):
+                        if(current->data->value >= 4.70 && current->data->value <= 5.00)
+                            hunter->ghostlyEvidence++;
+                        break;
+                    case(TEMPERATURE):
+                        if(current->data->value >= -10.0 && current->data->value <= 1.00)
+                            hunter->ghostlyEvidence++;
+                        break;
+                    case(FINGERPRINTS):
+                        if(current->data->value == 1.00)
+                            hunter->ghostlyEvidence++;
+                        break;
+                    case(SOUND):
+                        if(current->data->value >= 65.00 && current->data->value <= 75.00)
+                            hunter->ghostlyEvidence++;
+                        break;
+                }
+                current = current->next;
+            }
         }
     }
 }
@@ -120,28 +141,32 @@ void collectEvidence(HunterType *hunter){
 void shareEvidence(HunterType *hunter) {
     if(hunter->room->hunterListSize > 1) {
         int random = randInt(0, hunter->room->hunterListSize + 1);
-        if(strcmp(hunter->name, hunter->room->hunters[random]) != 0) {
+        if(strcmp(hunter->name, hunter->room->hunters[random]->name) != 0) {
             EvNodeType* current = hunter->room->evidence->head;
             while(current != NULL) {
                 switch (current->data->type) {
                     case EMF:
                         if(current->data->value >= 4.7) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            hunter->ghostlyEvidence++;
                         }
                         break;
                     case TEMPERATURE:
                         if(-10 <= current->data->value && current->data->value <= 1.0) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            hunter->ghostlyEvidence++;
                         }
                         break;
                     case FINGERPRINTS:
                         if(current->data->value == 1) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            hunter->ghostlyEvidence++;
                         }
                         break;
                     case SOUND:
                         if(65 <= current->data->value && current->data->value <= 75) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            hunter->ghostlyEvidence++;
                         }
                         break;
                 }
@@ -183,7 +208,7 @@ void* chooseAction(void* hunterArg){
             }
         }
 
-        if(hunter->evList->size >= 3){
+        if(hunter->ghostlyEvidence >= 3){
             break;
         } 
         if(hunter->fear >= 100){

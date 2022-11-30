@@ -34,6 +34,7 @@ typedef struct RoomType {
   struct EvidenceListType* evidence;
   struct HunterType* hunters[4];
   int hunterListSize;
+  pthread_mutex_t *mutex;
 } RoomType;
 
 typedef struct HunterType {
@@ -44,6 +45,7 @@ typedef struct HunterType {
   int boredom;
   char name[MAX_STR];
   int id;
+  int ghostlyEvidence;
 } HunterType;
 
 typedef struct BuildingType {
@@ -114,6 +116,7 @@ void cleanupRoomData(RoomListType*);
 void printHunterList(RoomType*);
 void randomRoom(RoomListType*, GhostType*, int);
 void randomRoomHunter(RoomListType*, HunterType*);
+void addEvidenceToRoom(RoomType*, EvidenceType*);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);

@@ -41,7 +41,7 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
             break;
     }
     initEvidence(evRange, gt, &evLeft);
-    addEvidence(room->evidence, &evLeft);
+    addEvidenceToRoom(room, &evLeft);
 }
 
 void* chooseGhostAction(void* ghostArg){
