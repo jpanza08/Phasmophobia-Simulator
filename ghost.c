@@ -84,6 +84,4 @@ void* chooseGhostAction(void* ghostArg){
 void switchRooms(GhostType* ghost){
     ghost->currRoom->ghost = NULL;
     randomRoom(ghost->currRoom->next, ghost, 1);
-    
-
 }

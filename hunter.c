@@ -93,13 +93,62 @@ void randomRoomHunter(RoomListType *list, HunterType *hunter){
 void switchRoomsHunter(HunterType *hunter){
     removeHunterFromRoom(hunter->room, hunter);
     randomRoomHunter(hunter->room->next, hunter);
-
 }
 
+/*
+ Function:   collectEvidence
+  Purpose:   hunter collects evidence from their current room
+       in:   hunter
+      out:   updated hunter evidence
+*/
 void collectEvidence(HunterType *hunter){
+    if(hunter->room->evidence->size != 0) {
+        EvNodeType* current = hunter->room->evidence->head;
+        while(current != NULL) {
+            addEvidenceToHunter(hunter, current->data);
+            current = current->next;
+        }
+    }
+}
 
-
-
+/*
+ Function:   shareEvidence
+  Purpose:   hunter shares evidence to other hunter in the same room
+       in:   hunter
+      out:   updated hunter evidence
+*/
+void shareEvidence(HunterType *hunter) {
+    if(hunter->room->hunterListSize > 1) {
+        int random = randInt(0, hunter->room->hunterListSize + 1);
+        if(strcmp(hunter->name, hunter->room->hunters[random]) != 0) {
+            EvNodeType* current = hunter->room->evidence->head;
+            while(current != NULL) {
+                switch (current->data->type) {
+                    case EMF:
+                        if(current->data->value >= 4.7) {
+                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                        }
+                        break;
+                    case TEMPERATURE:
+                        if(-10 <= current->data->value && current->data->value <= 1.0) {
+                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                        }
+                        break;
+                    case FINGERPRINTS:
+                        if(current->data->value == 1) {
+                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                        }
+                        break;
+                    case SOUND:
+                        if(65 <= current->data->value && current->data->value <= 75) {
+                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                        }
+                        break;
+                }
+                current = current->next;
+            }
+        }
+    }
 }
 
 /*
@@ -120,7 +169,7 @@ void* chooseAction(void* hunterArg){
             hunter->boredom = BOREDOM_MAX;
 
             if(hunter->room->hunterListSize > 1){
-                //TODO: Share evidence
+                shareEvidence(hunter);
             }else{
                 random = randInt(1, 3);
                 
