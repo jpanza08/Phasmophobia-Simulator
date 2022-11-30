@@ -34,7 +34,7 @@ typedef struct RoomType {
   struct EvidenceListType* evidence;
   struct HunterType* hunters[4];
   int hunterListSize;
-  pthread_mutex_t *mutex;
+  pthread_mutex_t mutex;
 } RoomType;
 
 typedef struct HunterType {
@@ -139,4 +139,4 @@ void addHunterToBuilding(HunterType*, BuildingType*);
 void populateRooms(BuildingType*);
 void cleanupBuilding(BuildingType*);
 void* chooseAction(void*);
-void scaredHunters(BuildingType*);
+void scaredHunters(BuildingType*, int*);

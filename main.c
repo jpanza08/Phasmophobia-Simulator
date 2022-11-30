@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     BuildingType building;
     char name1[MAX_STR], name2[MAX_STR], name3[MAX_STR], name4[MAX_STR];
     pthread_t hunter1Thread, hunter2Thread, hunter3Thread, hunter4Thread, ghostThread;
-    
+    int allScared = 0;
     //Building initialization
     initBuilding(&gh, &building);
     populateRooms(&building);
@@ -56,8 +56,12 @@ int main(int argc, char *argv[])
     pthread_join(ghostThread, NULL);
 
     //Threads finished, print results
-    scaredHunters(&building);
-
+    scaredHunters(&building, &allScared);
+    if(!allScared){
+        //TODO: Create guess ghost function
+    }else{
+        printf("\nThe Hunters were too scared, the Ghost wins! It was a %s.", getGhostName(gh.type));
+    }
     
     //Maybe make a function for this
     free(hunter1.evList);

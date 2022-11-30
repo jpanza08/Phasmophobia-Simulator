@@ -11,6 +11,7 @@ void initRoom(RoomType* room, char* name){
     room->next = roomList;
     room->ghost = NULL;
     room->hunterListSize = 0;
+    pthread_mutex_init(&room->mutex,NULL);
 }
 
 void initRoomList(RoomListType* list){

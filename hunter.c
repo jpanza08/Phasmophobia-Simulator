@@ -221,3 +221,5 @@ void* chooseAction(void* hunterArg){
    pthread_exit(NULL);
 
 }
+
+

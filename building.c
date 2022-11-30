@@ -108,13 +108,16 @@ void populateRooms(BuildingType* building) {
     connectRooms(garage, utility_room);
 }
 
-void scaredHunters(BuildingType *b){
-    printf("Hunters with who got too scared:");
+void scaredHunters(BuildingType *b, int *allScared){
+    int counter = 0;
+    printf("Hunters who got too scared:");
     for(int i = 0; i < 4; ++i){
         if(b->hunters[i]->fear >= 100){
             printf(" %s ", b->hunters[i]->name);
+            counter++;
         }
     }
-
+    if(counter == 4)
+        *allScared = 1;
 
 }

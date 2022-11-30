@@ -48,7 +48,7 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
 }
 
 void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
-   pthread_mutex_lock(room->mutex);
+   pthread_mutex_lock(&room->mutex);
    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
     if(room->evidence->head == NULL){
@@ -60,7 +60,7 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
         room->evidence->tail = newNode;
         room->evidence->size++;
     }
-    pthread_mutex_unlock(room->mutex);
+    pthread_mutex_unlock(&room->mutex);
 }
 
 void printEvidenceList(EvidenceListType* list) {
