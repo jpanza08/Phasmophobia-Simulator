@@ -133,6 +133,7 @@ void cleanupHunters(HunterType*);
 void switchRoomsHunter(HunterType*);
 void collectEvidence(HunterType*);
 void shareEvidence(HunterType*);
+void removeEvidenceRoom(RoomType*, EvidenceType*);
 
 void initBuilding(GhostType*, BuildingType*);
 void addHunterToBuilding(HunterType*, BuildingType*);

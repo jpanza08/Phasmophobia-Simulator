@@ -105,6 +105,7 @@ void switchRoomsHunter(HunterType *hunter){
 void collectEvidence(HunterType *hunter){
     if(hunter->room->evidence->size != 0) {
         EvNodeType* current = hunter->room->evidence->head;
+		EvNodeType* temp = current;
         while(current != NULL) {
             if(current->data->type == hunter->reads){
                 addEvidenceToHunter(hunter, current->data);
@@ -112,24 +113,50 @@ void collectEvidence(HunterType *hunter){
                     case(EMF):
                         if(current->data->value >= 4.70 && current->data->value <= 5.00)
                             hunter->ghostlyEvidence++;
+                            hunter->boredom = BOREDOM_MAX;
                         break;
                     case(TEMPERATURE):
                         if(current->data->value >= -10.0 && current->data->value <= 1.00)
                             hunter->ghostlyEvidence++;
+                            hunter->boredom = BOREDOM_MAX;
                         break;
                     case(FINGERPRINTS):
                         if(current->data->value == 1.00)
                             hunter->ghostlyEvidence++;
+                            hunter->boredom = BOREDOM_MAX;
                         break;
                     case(SOUND):
                         if(current->data->value >= 65.00 && current->data->value <= 75.00)
                             hunter->ghostlyEvidence++;
+							hunter->boredom = BOREDOM_MAX;
                         break;
                 }
                 current = current->next;
+				removeEvidenceRoom(hunter->room, temp);
+				temp = current;
             }
         }
-    }
+    } else {
+		EvidenceType ev;
+		float evRange;
+		EvidenceEnumType evType = hunter->reads;
+		switch(evType) {
+			case EMF:
+				evRange = randFloat(0, 5);
+				break;
+			case TEMPERATURE:
+				evRange = randFloat(0, 27);
+				break;
+			case FINGERPRINTS:
+				evRange = randFloat(0, 1);
+				break;
+			case SOUND:
+				evRange = randFloat(40, 70);
+				break;
+    	}
+		initEvidence(evRange, evType, &ev);
+		addEvidenceToHunter(hunter, &ev);
+	}
 }
 
 /*
@@ -148,25 +175,25 @@ void shareEvidence(HunterType *hunter) {
                     case EMF:
                         if(current->data->value >= 4.7) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
-                            hunter->ghostlyEvidence++;
+                            hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case TEMPERATURE:
                         if(-10 <= current->data->value && current->data->value <= 1.0) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
-                            hunter->ghostlyEvidence++;
+                            hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case FINGERPRINTS:
                         if(current->data->value == 1) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
-                            hunter->ghostlyEvidence++;
+                            hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case SOUND:
                         if(65 <= current->data->value && current->data->value <= 75) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
-                            hunter->ghostlyEvidence++;
+                            hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                 }
@@ -188,25 +215,25 @@ void* chooseAction(void* hunterArg){
     //Make share evi function
 
     while(1){
-
         if(hunter->room->ghost != NULL){
             hunter->fear++;
             hunter->boredom = BOREDOM_MAX;
-
-            if(hunter->room->hunterListSize > 1){
-                shareEvidence(hunter);
-            }else{
-                random = randInt(1, 3);
-                
-                switch(random){
-                    case(1): 
-                        collectEvidence(hunter);
-                    case(2):
-                        switchRoomsHunter(hunter);
-                        hunter->boredom--;
-                }
-            }
-        }
+		}
+		random = randInt(1, 4);
+		switch(random){
+			case(1): 
+				collectEvidence(hunter);
+				break;
+			case(2):
+				switchRoomsHunter(hunter);
+				hunter->boredom--;
+				break;
+			case 3:
+				if(hunter->room->hunterListSize > 1) {
+					shareEvidence(hunter);
+				}
+				break;
+		}
 
         if(hunter->ghostlyEvidence >= 3){
             break;

@@ -69,6 +69,30 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
     pthread_mutex_unlock(&room->mutex);
 }
 
+/*
+ Function:   removeEvidenceRoom
+  Purpose:   removes evidence from room
+   in/out:   room
+       in:   evidence to be removed from room 
+*/
+void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
+    pthread_mutex_lock(&room->mutex);
+    EvNodeType* current = room->evidence->head;
+    if(current == NULL) return C_NOK;
+
+    while(current->next != NULL) {
+        if(current->next->data == ev) {
+            EvNodeType* temp = current->next->next;
+            free(current->next->data);
+            free(current->next);
+            current->next = temp;
+            return C_OK;
+        }
+        current = current->next;
+    }
+    pthread_mutex_unlock(&room->mutex);
+}
+
 void printEvidenceList(EvidenceListType* list) {
     EvNodeType* current = list->head;
     printf("\n");
