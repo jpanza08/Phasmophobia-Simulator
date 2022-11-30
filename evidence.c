@@ -47,6 +47,12 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
     }
 }
 
+/*
+ Function:   addEvidenceToRoom
+  Purpose:   adds the evidence to the room passed in, uses the rooms mutex to prevent syncronization errors.
+   in/out:   room to add evidence to
+       in:   evidence to be added to the room 
+*/
 void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
    pthread_mutex_lock(&room->mutex);
    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
