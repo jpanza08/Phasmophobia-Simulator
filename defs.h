@@ -122,7 +122,7 @@ void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);
 void leaveEvidence(RoomType*, GhostType*);
 void* chooseGhostAction(void*);
-void switchRooms(GhostType*);
+void switchGhostRooms(GhostType*);
 
 void initHunter(RoomType*, EvidenceEnumType, char*, int, HunterType*);
 void addHunterToRoom(RoomType*, HunterType*);

@@ -71,29 +71,20 @@ void cleanupHunters(HunterType* hunters){
 
 }
 
-void randomRoomHunter(RoomListType *list, HunterType *hunter){
-    while(1){    
-            int stop = randInt(0,list->size);
-            RoomNodeType *curr = list->head;
-            for(int i = 0; i < list->size; ++i){
-                if(i == stop){
-                    if(!(curr->data == hunter->room)){
-                        hunter->room = curr->data;
-                        addHunterToRoom(curr->data, hunter);
-                        return;
-                    }
-                    continue;
-                }
-                curr = curr->next;
-            }
-        }
-
-}
-
 
 void switchRoomsHunter(HunterType *hunter){
     removeHunterFromRoom(hunter->room, hunter);
-    randomRoomHunter(hunter->room->next, hunter);
+    RoomListType* list = hunter->room->next;
+    int stop = randInt(0,list->size);
+    RoomNodeType *curr = list->head;
+    for(int i = 0; i < list->size; ++i){
+        if(i == stop){
+            hunter->room = curr->data;
+            addHunterToRoom(curr->data, hunter);
+            return;
+        }
+        curr = curr->next;
+    }
 }
 
 /*

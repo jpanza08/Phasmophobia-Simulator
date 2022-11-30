@@ -28,16 +28,16 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     EvidenceEnumType gt = randomint;
     switch(gt) {
         case EMF:
-            evRange = randFloat(0, 5);
+            evRange = randFloat(0, 5.01);
             break;
         case TEMPERATURE:
-            evRange = randFloat(-10, 27);
+            evRange = randFloat(-10, 27.01);
             break;
         case FINGERPRINTS:
-            evRange = randFloat(0, 1);
+            evRange = randFloat(0, 1.01);
             break;
         case SOUND:
-            evRange = randFloat(40, 75);
+            evRange = randFloat(40, 75.01);
             break;
     }
     initEvidence(evRange, gt, &evLeft);
@@ -63,16 +63,9 @@ void* chooseGhostAction(void* ghostArg){
                     leaveEvidence(ghost->currRoom, ghost);
                     break;
                 case 2:
-                    switchRooms(ghost);
+                    switchGhostRooms(ghost);
                     break;
             }
-            //Randomly choose to leave, drop evi, or do nothing.
-                //If moving rooms, update ghost room pointer and room ghost pointer.
-                //If leaving evidence, make new evi structure and add it to room's evidence
-                    //Randomly select evidence type based on ghost type.
-                    //Randomly generate value within evidence range
-        
-
         }
         if(ghost->boredom <= 0)
             break;
@@ -81,7 +74,16 @@ void* chooseGhostAction(void* ghostArg){
 }
 
 
-void switchRooms(GhostType* ghost){
+void switchGhostRooms(GhostType* ghost){
     ghost->currRoom->ghost = NULL;
-    randomRoom(ghost->currRoom->next, ghost, 1);
+	int stop = randInt(0, ghost->currRoom->next->size);
+	RoomNodeType *curr = ghost->currRoom->next->head;
+	for(int i = 0; i < ghost->currRoom->next->size; ++i){
+		if(i == stop) {
+			ghost->currRoom = curr->data;
+			curr->data->ghost = ghost;
+			break;
+		}
+		curr = curr->next;
+	}
 }
