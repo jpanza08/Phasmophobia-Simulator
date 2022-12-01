@@ -69,9 +69,10 @@ void* chooseGhostAction(void* ghostArg){
             }
         }
         if(ghost->boredom <= 0)
+            printf("The ghost got bored and left");            
             break;
     }
-    pthread_exit(ghost);
+    return NULL;
 }
 
 
@@ -83,7 +84,7 @@ void switchGhostRooms(GhostType* ghost){
 		if(i == stop) {
 			ghost->currRoom = curr->data;
 			curr->data->ghost = ghost;
-            printf("Ghost moved into %s.\n", curr->data->name);
+            // printf("Ghost moved into %s.\n", curr->data->name);
 			break;
 		}
 		curr = curr->next;

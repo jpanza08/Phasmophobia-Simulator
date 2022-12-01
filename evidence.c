@@ -63,6 +63,7 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
         room->evidence->tail = newNode;
         room->evidence->size++;
     }else{
+        printf("Ghost left evidence in %s.\n", room->name);
         room->evidence->tail->next = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;

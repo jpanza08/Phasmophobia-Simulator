@@ -29,6 +29,7 @@ void printHunterEvidence(HunterType* h) {
       out:   updated room with hunter
 */
 void addHunterToRoom(RoomType* room, HunterType* h) {
+    pthread_mutex_lock(&room->mutex);
     int length = room->hunterListSize;
     if(length >= 4) {
         printf("\nlist is full\n");
@@ -36,6 +37,7 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
         room->hunters[length] = h;
         room->hunterListSize++;
     }
+    pthread_mutex_unlock(&room->mutex);
 }
 
 /*
@@ -46,6 +48,7 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
       out:   updated room without hunter
 */
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
+    pthread_mutex_lock(&room->mutex);
     int length = room->hunterListSize;
     int index;
     if(length == 0) {
@@ -62,6 +65,7 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
         }
         room->hunterListSize--;
     }
+    pthread_mutex_unlock(&room->mutex);
 }
 
 void cleanupHunters(HunterType* hunters){
@@ -79,6 +83,7 @@ void switchRoomsHunter(HunterType *hunter){
     RoomNodeType *curr = list->head;
     for(int i = 0; i < list->size; ++i){
         if(i == stop){
+            hunter->room->hunterListSize--;
             hunter->room = curr->data;
             addHunterToRoom(curr->data, hunter);
             printf("%s moved into %s.\n", hunter->name, curr->data->name);
@@ -215,7 +220,7 @@ void* chooseAction(void* hunterArg){
 		random = randInt(1, 4);
 		switch(random){
 			case(1): 
-				collectEvidence(hunter);
+				// collectEvidence(hunter);
 				break;
 			case(2):
 				switchRoomsHunter(hunter);
@@ -229,16 +234,19 @@ void* chooseAction(void* hunterArg){
 		}
 
         if(hunter->ghostlyEvidence >= 3){
+            printf("%s got enough evidence to leave.\n", hunter->name);
             break;
         } 
         if(hunter->fear >= 100){
+            printf("%s got too scared and left!\n", hunter->name);
             break;
         }
         if(hunter->boredom <= 0){
+            printf("%s got bored and left\n", hunter->name);
             break;
         }
     }
-   pthread_exit(hunter);
+   return NULL;
 
 }
 
