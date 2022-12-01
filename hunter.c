@@ -81,6 +81,7 @@ void switchRoomsHunter(HunterType *hunter){
         if(i == stop){
             hunter->room = curr->data;
             addHunterToRoom(curr->data, hunter);
+            printf("%s moved into %s.\n", hunter->name, curr->data->name);
             return;
         }
         curr = curr->next;
@@ -94,7 +95,7 @@ void switchRoomsHunter(HunterType *hunter){
       out:   updated hunter evidence
 */
 void collectEvidence(HunterType *hunter){
-    if(hunter->room->evidence->size != 0) {
+    if(hunter->room->evidence->size != 0) { //Is there even evidence to collect?
         EvNodeType* current = hunter->room->evidence->head;
 		EvNodeType* temp = current;
         while(current != NULL) {
@@ -123,7 +124,7 @@ void collectEvidence(HunterType *hunter){
                         break;
                 }
                 current = current->next;
-				removeEvidenceRoom(hunter->room, temp);
+				removeEvidenceRoom(hunter->room, temp->data);
 				temp = current;
             }
         }
@@ -158,8 +159,9 @@ void collectEvidence(HunterType *hunter){
 */
 void shareEvidence(HunterType *hunter) {
     if(hunter->room->hunterListSize > 1) {
-        int random = randInt(0, hunter->room->hunterListSize + 1);
+        int random = randInt(0, hunter->room->hunterListSize);
         if(strcmp(hunter->name, hunter->room->hunters[random]->name) != 0) {
+            printf("%s shared evidence with %s.\n", hunter->room->hunters[random]->name, hunter->name);
             EvNodeType* current = hunter->room->evidence->head;
             while(current != NULL) {
                 switch (current->data->type) {
@@ -221,7 +223,7 @@ void* chooseAction(void* hunterArg){
 				break;
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
-					shareEvidence(hunter);
+					// shareEvidence(hunter);
 				}
 				break;
 		}
@@ -236,7 +238,7 @@ void* chooseAction(void* hunterArg){
             break;
         }
     }
-   pthread_exit(NULL);
+   pthread_exit(hunter);
 
 }
 

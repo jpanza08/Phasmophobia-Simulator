@@ -17,29 +17,28 @@ int main(int argc, char *argv[])
     
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
-    pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
+   
     randomRoom(building.rooms, &gh, 0); //Giving ghost random room
 
     //Initializing hunters
     printf("Enter the first Hunter's name: ");
     scanf("%s", name1);
     initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
-    pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
+   
     
     printf("Enter the second Hunter's name: ");
     scanf("%s", name2);
     initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
-    pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
+    
     
     printf("Enter the third Hunter's name: ");
     scanf("%s", name3);
     initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
-    pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
     
     printf("Enter the fourth Hunter's name: ");
     scanf("%s", name4);
     initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
-    pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
+
     
     //Adding hunters to rooms
     addHunterToRoom(building.rooms->head->data, &hunter1);
@@ -47,6 +46,11 @@ int main(int argc, char *argv[])
     addHunterToRoom(building.rooms->head->data, &hunter3);
     addHunterToRoom(building.rooms->head->data, &hunter4);
 
+    pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
+    pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
+    pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
+    pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
+    pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
     
     //Cleanup stuff
     pthread_join(hunter1Thread, NULL);

@@ -58,6 +58,7 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
     if(room->evidence->head == NULL){
+        printf("Ghost left evidence in %s.\n", room->name);
         room->evidence->head = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
@@ -78,7 +79,7 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
 void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
     pthread_mutex_lock(&room->mutex);
     EvNodeType* current = room->evidence->head;
-    if(current == NULL) return C_NOK;
+    if(current != NULL){
 
     while(current->next != NULL) {
         if(current->next->data == ev) {
@@ -86,9 +87,10 @@ void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
             free(current->next->data);
             free(current->next);
             current->next = temp;
-            return C_OK;
+            break;
         }
         current = current->next;
+    }
     }
     pthread_mutex_unlock(&room->mutex);
 }

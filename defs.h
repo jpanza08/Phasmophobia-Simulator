@@ -87,15 +87,12 @@ typedef struct EvidenceListType{
 
 
 
-
-
-
 // You may rename these types if you wish
 
 int randInt(int, int);          // Generates a pseudorandom integer between the parameters
 float randFloat(float, float);  // Generates a pseudorandom float between the parameters
 
-// void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
+void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
 
 void initEvidence(float, EvidenceEnumType, EvidenceType*);
 void initEvidenceList(EvidenceListType*);

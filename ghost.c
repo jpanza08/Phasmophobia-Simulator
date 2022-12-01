@@ -24,8 +24,8 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
 void leaveEvidence(RoomType* room, GhostType* ghost) {
     EvidenceType evLeft;
     float evRange;
-    int randomint = randInt(1, 3);
-    EvidenceEnumType gt = randomint;
+    int randomInt = randInt(1, 3);
+    EvidenceEnumType gt = randomInt;
     switch(gt) {
         case EMF:
             evRange = randFloat(0, 5.01);
@@ -49,6 +49,7 @@ void* chooseGhostAction(void* ghostArg){
     int random;
 
     while(1){
+        sleep(1);
         if(ghost->currRoom->hunterListSize != 0){
             ghost->boredom = BOREDOM_MAX;            
             random = randInt(1, 3);
@@ -70,7 +71,7 @@ void* chooseGhostAction(void* ghostArg){
         if(ghost->boredom <= 0)
             break;
     }
-    pthread_exit(NULL);
+    pthread_exit(ghost);
 }
 
 
@@ -82,6 +83,7 @@ void switchGhostRooms(GhostType* ghost){
 		if(i == stop) {
 			ghost->currRoom = curr->data;
 			curr->data->ghost = ghost;
+            printf("Ghost moved into %s.\n", curr->data->name);
 			break;
 		}
 		curr = curr->next;
