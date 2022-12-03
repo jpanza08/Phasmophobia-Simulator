@@ -24,23 +24,40 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
 void leaveEvidence(RoomType* room, GhostType* ghost) {
     EvidenceType evLeft;
     float evRange;
-    int randomInt = randInt(1, 3);
-    EvidenceEnumType gt = randomInt;
-    switch(gt) {
-        case EMF:
-            evRange = randFloat(0, 5.01);
+    EvidenceEnumType et; //case for ghost type
+
+    switch(ghost->type) {
+        case POLTERGEIST:
+            et = randInt(0, 3);
             break;
-        case TEMPERATURE:
-            evRange = randFloat(-10, 27.01);
+        case BULLIES:
+            et = randInt(1, 4);
+            if(et == 1) et--;
             break;
-        case FINGERPRINTS:
-            evRange = randFloat(0, 1.01);
+        case BANSHEE:
+            et = randInt(0, 3);
+            if(et == 2) et++;
             break;
-        case SOUND:
-            evRange = randFloat(40, 75.01);
+        case PHANTOM:
+            et = randInt(1, 4);
             break;
     }
-    initEvidence(evRange, gt, &evLeft);
+
+    switch(et) {
+        case EMF:
+            evRange = randFloat(4.7, 5);
+            break;
+        case TEMPERATURE:
+            evRange = randFloat(-10, 27);
+            break;
+        case FINGERPRINTS:
+            evRange = 1;
+            break;
+        case SOUND:
+            evRange = randFloat(40, 75);
+            break;
+    }
+    initEvidence(evRange, et, 1, &evLeft);
     addEvidenceToRoom(room, &evLeft);
 }
 
@@ -49,7 +66,8 @@ void* chooseGhostAction(void* ghostArg){
     int random;
 
     while(1){
-        sleep(1);
+        RoomType* currentRoom = ghost->currRoom;
+        sem_wait(&(currentRoom->mutex));
         if(ghost->currRoom->hunterListSize != 0){
             ghost->boredom = BOREDOM_MAX;            
             random = randInt(1, 3);
@@ -68,25 +86,39 @@ void* chooseGhostAction(void* ghostArg){
                     break;
             }
         }
+        sem_post(&(currentRoom->mutex));
         if(ghost->boredom <= 0)
             printf("The ghost got bored and left");            
             break;
     }
-    return NULL;
+
+    return 0;
 }
 
 
-void switchGhostRooms(GhostType* ghost){
+void switchGhostRooms(GhostType* ghost){ // try wait bs gl
+    RoomType* roomToGo;
     ghost->currRoom->ghost = NULL;
+    if(ghost->currRoom->next->size == 1) {
+        roomToGo = ghost->currRoom->next->head->data;
+        return;
+    }
+
 	int stop = randInt(0, ghost->currRoom->next->size);
 	RoomNodeType *curr = ghost->currRoom->next->head;
+
 	for(int i = 0; i < ghost->currRoom->next->size; ++i){
 		if(i == stop) {
-			ghost->currRoom = curr->data;
-			curr->data->ghost = ghost;
-            // printf("Ghost moved into %s.\n", curr->data->name);
+			roomToGo = curr->data;
+            printf("Ghost moved into %s.\n", curr->data->name);
 			break;
 		}
 		curr = curr->next;
 	}
+    if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its locked
+        ghost->currRoom = roomToGo;
+        ghost->currRoom->ghost = ghost;
+        sem_post(&(roomToGo->mutex));
+    }
+
 }

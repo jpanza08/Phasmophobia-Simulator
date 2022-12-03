@@ -15,9 +15,10 @@ const char* getEvidenceName(EvidenceEnumType name) {
     }
 }
 
-void initEvidence(float value, EvidenceEnumType reading, EvidenceType* ev) {
+void initEvidence(float value, EvidenceEnumType reading, int ghostly, EvidenceType* ev) {
     ev->type = reading;
     ev->value = value;
+    ev->ghostly = ghostly;
 }
 
 void initEvidenceList(EvidenceListType *list){
@@ -54,7 +55,6 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
        in:   evidence to be added to the room 
 */
 void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
-   pthread_mutex_lock(&room->mutex);
    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
     if(room->evidence->head == NULL){
@@ -68,7 +68,6 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
         room->evidence->tail = newNode;
         room->evidence->size++;
     }
-    pthread_mutex_unlock(&room->mutex);
 }
 
 /*
@@ -78,22 +77,19 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
        in:   evidence to be removed from room 
 */
 void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
-    pthread_mutex_lock(&room->mutex);
     EvNodeType* current = room->evidence->head;
     if(current != NULL){
-
-    while(current->next != NULL) {
-        if(current->next->data == ev) {
-            EvNodeType* temp = current->next->next;
-            free(current->next->data);
-            free(current->next);
-            current->next = temp;
-            break;
+        while(current->next != NULL) {
+            if(current->next->data == ev) {
+                EvNodeType* temp = current->next->next;
+                free(current->next->data);
+                free(current->next);
+                current->next = temp;
+                break;
+            }
+            current = current->next;
         }
-        current = current->next;
     }
-    }
-    pthread_mutex_unlock(&room->mutex);
 }
 
 void printEvidenceList(EvidenceListType* list) {

@@ -58,6 +58,7 @@ typedef struct BuildingType {
 typedef struct EvidenceType{
   float value;
   EvidenceEnumType type;
+  int ghostly;
 } EvidenceType;
 
 // Nodes
@@ -94,7 +95,7 @@ float randFloat(float, float);  // Generates a pseudorandom float between the pa
 
 void populateRooms(BuildingType*);   // Populates the building with sample data for rooms
 
-void initEvidence(float, EvidenceEnumType, EvidenceType*);
+void initEvidence(float, EvidenceEnumType, int, EvidenceType*);
 void initEvidenceList(EvidenceListType*);
 void addEvidence(EvidenceListType*, EvidenceType*);
 void cleanupEvidenceList(EvidenceListType*);

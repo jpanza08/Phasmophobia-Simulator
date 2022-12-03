@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     //Building initialization
     initBuilding(&gh, &building);
     populateRooms(&building);
-    
+    printf("%s\n", building.rooms->head->data->name);
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
    

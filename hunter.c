@@ -29,7 +29,6 @@ void printHunterEvidence(HunterType* h) {
       out:   updated room with hunter
 */
 void addHunterToRoom(RoomType* room, HunterType* h) {
-    pthread_mutex_lock(&room->mutex);
     int length = room->hunterListSize;
     if(length >= 4) {
         printf("\nlist is full\n");
@@ -37,7 +36,6 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
         room->hunters[length] = h;
         room->hunterListSize++;
     }
-    pthread_mutex_unlock(&room->mutex);
 }
 
 /*
@@ -48,7 +46,6 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
       out:   updated room without hunter
 */
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
-    pthread_mutex_lock(&room->mutex);
     int length = room->hunterListSize;
     int index;
     if(length == 0) {
@@ -65,7 +62,6 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
         }
         room->hunterListSize--;
     }
-    pthread_mutex_unlock(&room->mutex);
 }
 
 void cleanupHunters(HunterType* hunters){
@@ -76,7 +72,7 @@ void cleanupHunters(HunterType* hunters){
 }
 
 
-void switchRoomsHunter(HunterType *hunter){
+void switchRoomsHunter(HunterType *hunter){ // you must use try wait gl
     removeHunterFromRoom(hunter->room, hunter);
     RoomListType* list = hunter->room->next;
     int stop = randInt(0,list->size);
@@ -106,31 +102,33 @@ void collectEvidence(HunterType *hunter){
         while(current != NULL) {
             if(current->data->type == hunter->reads){
                 addEvidenceToHunter(hunter, current->data);
-                switch(current->data->type){
-                    case(EMF):
-                        if(current->data->value >= 4.70 && current->data->value <= 5.00)
-                            hunter->ghostlyEvidence++;
-                            hunter->boredom = BOREDOM_MAX;
-                        break;
-                    case(TEMPERATURE):
-                        if(current->data->value >= -10.0 && current->data->value <= 1.00)
-                            hunter->ghostlyEvidence++;
-                            hunter->boredom = BOREDOM_MAX;
-                        break;
-                    case(FINGERPRINTS):
-                        if(current->data->value == 1.00)
-                            hunter->ghostlyEvidence++;
-                            hunter->boredom = BOREDOM_MAX;
-                        break;
-                    case(SOUND):
-                        if(current->data->value >= 65.00 && current->data->value <= 75.00)
-                            hunter->ghostlyEvidence++;
-							hunter->boredom = BOREDOM_MAX;
-                        break;
-                }
+                // switch(current->data->type){
+                //     case(EMF):
+                //         if(current->data->value >= 4.70 && current->data->value <= 5.00)
+                //             hunter->ghostlyEvidence++;
+                //             hunter->boredom = BOREDOM_MAX;
+                //         break;
+                //     case(TEMPERATURE):
+                //         if(current->data->value >= -10.0 && current->data->value <= 1.00)
+                //             hunter->ghostlyEvidence++;
+                //             hunter->boredom = BOREDOM_MAX;
+                //         break;
+                //     case(FINGERPRINTS):
+                //         if(current->data->value == 1.00)
+                //             hunter->ghostlyEvidence++;
+                //             hunter->boredom = BOREDOM_MAX;
+                //         break;
+                //     case(SOUND):
+                //         if(current->data->value >= 65.00 && current->data->value <= 75.00)
+                //             hunter->ghostlyEvidence++;
+				// 			hunter->boredom = BOREDOM_MAX;
+                //         break;
+                // }
+                hunter->ghostlyEvidence++;
+                hunter->boredom = BOREDOM_MAX;
                 current = current->next;
-				removeEvidenceRoom(hunter->room, temp->data);
-				temp = current;
+                removeEvidenceRoom(hunter->room, temp->data);
+                temp = current;
             }
         }
     } else {
@@ -139,7 +137,7 @@ void collectEvidence(HunterType *hunter){
 		EvidenceEnumType evType = hunter->reads;
 		switch(evType) {
 			case EMF:
-				evRange = randFloat(0, 5);
+				evRange = randFloat(0, 4.9);
 				break;
 			case TEMPERATURE:
 				evRange = randFloat(0, 27);
@@ -151,7 +149,7 @@ void collectEvidence(HunterType *hunter){
 				evRange = randFloat(40, 70);
 				break;
     	}
-		initEvidence(evRange, evType, &ev);
+		initEvidence(evRange, evType, 0, &ev);
 		addEvidenceToHunter(hunter, &ev);
 	}
 }
@@ -213,6 +211,9 @@ void* chooseAction(void* hunterArg){
     //Make share evi function
 
     while(1){
+        RoomType* currentRoom = hunter->room;
+        sem_wait(&(currentRoom->mutex));
+
         if(hunter->room->ghost != NULL){
             hunter->fear++;
             hunter->boredom = BOREDOM_MAX;
@@ -232,6 +233,7 @@ void* chooseAction(void* hunterArg){
 				}
 				break;
 		}
+        sem_post(&(currentRoom->mutex));
 
         if(hunter->ghostlyEvidence >= 3){
             printf("%s got enough evidence to leave.\n", hunter->name);
@@ -246,8 +248,6 @@ void* chooseAction(void* hunterArg){
             break;
         }
     }
-   return NULL;
 
+    return 0;
 }
-
-
