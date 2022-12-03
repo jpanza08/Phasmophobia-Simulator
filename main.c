@@ -14,64 +14,66 @@ int main(int argc, char *argv[])
     //Building initialization
     initBuilding(&gh, &building);
     populateRooms(&building);
-    printf("%s\n", building.rooms->head->data->name);
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
    
     randomRoom(building.rooms, &gh, 0); //Giving ghost random room
+    // printf("\nafter room");
+    printf("\nGhost is a: %s, and is in room: %s", getGhostName(gh.type), gh.currRoom->name);
+    // printf("what kind of fuckeruy");
 
     //Initializing hunters
-    printf("Enter the first Hunter's name: ");
+    printf("\nEnter the first Hunter's name: ");
     scanf("%s", name1);
     initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
    
     
-    printf("Enter the second Hunter's name: ");
-    scanf("%s", name2);
-    initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
+    // printf("Enter the second Hunter's name: ");
+    // scanf("%s", name2);
+    // initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
     
     
-    printf("Enter the third Hunter's name: ");
-    scanf("%s", name3);
-    initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
+    // printf("Enter the third Hunter's name: ");
+    // scanf("%s", name3);
+    // initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
     
-    printf("Enter the fourth Hunter's name: ");
-    scanf("%s", name4);
-    initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
+    // printf("Enter the fourth Hunter's name: ");
+    // scanf("%s", name4);
+    // initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
 
     
-    //Adding hunters to rooms
+    // //Adding hunters to rooms
     addHunterToRoom(building.rooms->head->data, &hunter1);
-    addHunterToRoom(building.rooms->head->data, &hunter2);
-    addHunterToRoom(building.rooms->head->data, &hunter3);
-    addHunterToRoom(building.rooms->head->data, &hunter4);
+    // addHunterToRoom(building.rooms->head->data, &hunter2);
+    // addHunterToRoom(building.rooms->head->data, &hunter3);
+    // addHunterToRoom(building.rooms->head->data, &hunter4);
 
-    pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
+    // pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
     pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
-    pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
-    pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
-    pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
+    // pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
+    // pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
+    // pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
     
     //Cleanup stuff
     pthread_join(hunter1Thread, NULL);
-    pthread_join(hunter2Thread, NULL);
-    pthread_join(hunter3Thread, NULL);
-    pthread_join(hunter4Thread, NULL);
-    pthread_join(ghostThread, NULL);
+    // pthread_join(hunter2Thread, NULL);
+    // pthread_join(hunter3Thread, NULL);
+    // pthread_join(hunter4Thread, NULL);
+    // pthread_join(ghostThread, NULL);
 
     //Threads finished, print results
-    scaredHunters(&building, &allScared);
-    if(!allScared){
-        //TODO: Create guess ghost function
-    }else{
-        printf("\nThe Hunters were too scared, the Ghost wins! It was a %s.", getGhostName(gh.type));
-    }
+    // scaredHunters(&building, &allScared);
+    // if(!allScared){
+    //     //TODO: Create guess ghost function
+    // }else{
+    //     printf("\nThe Hunters were too scared, the Ghost wins! It was a %s.", getGhostName(gh.type));
+    // }
     
     //Maybe make a function for this
-    free(hunter1.evList);
-    free(hunter2.evList);
-    free(hunter3.evList);
-    free(hunter4.evList);
+    // free(hunter1.evList);
+    // free(hunter2.evList);
+    // free(hunter3.evList);
+    // free(hunter4.evList);
     cleanupBuilding(&building);
 
     

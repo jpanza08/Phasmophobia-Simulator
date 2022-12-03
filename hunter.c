@@ -8,7 +8,7 @@ void initHunter(RoomType* room, EvidenceEnumType reads, char* name, int id, Hunt
     h->reads = reads;
     strcpy(h->name, name);
     h->fear = 0;
-    h->boredom = BOREDOM_MAX;
+    h->boredom = 6;
     h->id = id;
     h->ghostlyEvidence = 0;
 }
@@ -102,28 +102,6 @@ void collectEvidence(HunterType *hunter){
         while(current != NULL) {
             if(current->data->type == hunter->reads){
                 addEvidenceToHunter(hunter, current->data);
-                // switch(current->data->type){
-                //     case(EMF):
-                //         if(current->data->value >= 4.70 && current->data->value <= 5.00)
-                //             hunter->ghostlyEvidence++;
-                //             hunter->boredom = BOREDOM_MAX;
-                //         break;
-                //     case(TEMPERATURE):
-                //         if(current->data->value >= -10.0 && current->data->value <= 1.00)
-                //             hunter->ghostlyEvidence++;
-                //             hunter->boredom = BOREDOM_MAX;
-                //         break;
-                //     case(FINGERPRINTS):
-                //         if(current->data->value == 1.00)
-                //             hunter->ghostlyEvidence++;
-                //             hunter->boredom = BOREDOM_MAX;
-                //         break;
-                //     case(SOUND):
-                //         if(current->data->value >= 65.00 && current->data->value <= 75.00)
-                //             hunter->ghostlyEvidence++;
-				// 			hunter->boredom = BOREDOM_MAX;
-                //         break;
-                // }
                 hunter->ghostlyEvidence++;
                 hunter->boredom = BOREDOM_MAX;
                 current = current->next;
@@ -212,8 +190,7 @@ void* chooseAction(void* hunterArg){
 
     while(1){
         RoomType* currentRoom = hunter->room;
-        sem_wait(&(currentRoom->mutex));
-
+        // sem_wait(&(currentRoom->mutex));
         if(hunter->room->ghost != NULL){
             hunter->fear++;
             hunter->boredom = BOREDOM_MAX;
@@ -233,7 +210,7 @@ void* chooseAction(void* hunterArg){
 				}
 				break;
 		}
-        sem_post(&(currentRoom->mutex));
+        // sem_post(&(currentRoom->mutex));
 
         if(hunter->ghostlyEvidence >= 3){
             printf("%s got enough evidence to leave.\n", hunter->name);

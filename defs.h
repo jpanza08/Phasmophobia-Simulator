@@ -34,7 +34,8 @@ typedef struct RoomType {
   struct EvidenceListType* evidence;
   struct HunterType* hunters[4];
   int hunterListSize;
-  pthread_mutex_t mutex;
+  // pthread_mutex_t mutex;
+  sem_t mutex;
 } RoomType;
 
 typedef struct HunterType {

@@ -11,7 +11,8 @@ void initRoom(RoomType* room, char* name){
     room->next = roomList;
     room->ghost = NULL;
     room->hunterListSize = 0;
-    pthread_mutex_init(&room->mutex,NULL);
+    // pthread_mutex_init(&room->mutex, NULL);
+    sem_init(&(room->mutex), 0, 0);
 }
 
 void initRoomList(RoomListType* list){
@@ -146,16 +147,16 @@ void printRooms(RoomListType *list){
 */
 void randomRoom(RoomListType *list, GhostType *ghost, int van){
     if(!van){
-    int stop = randInt(1, list->size);
-    RoomNodeType *curr = list->head;
-    for(int i = 1; i < list->size; ++i){
-        if(i == stop){
-            ghost->currRoom = curr->data;
-            curr->data->ghost = ghost;
-            return;
+        int stop = randInt(1, list->size);
+        RoomNodeType *curr = list->head->next;
+        for(int i = 1; i < list->size; ++i){
+            if(i == stop){
+                ghost->currRoom = curr->data;
+                curr->data->ghost = ghost;
+                break;
+            }
+            curr = curr->next;
         }
-        curr = curr->next;
-    }
     }else{
         while(1){    
             int stop = randInt(0,list->size);

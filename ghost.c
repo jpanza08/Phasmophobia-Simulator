@@ -64,10 +64,9 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
 void* chooseGhostAction(void* ghostArg){
     GhostType* ghost = (GhostType*) ghostArg;
     int random;
-
     while(1){
         RoomType* currentRoom = ghost->currRoom;
-        sem_wait(&(currentRoom->mutex));
+        // sem_wait(&(currentRoom->mutex));
         if(ghost->currRoom->hunterListSize != 0){
             ghost->boredom = BOREDOM_MAX;            
             random = randInt(1, 3);
@@ -86,10 +85,11 @@ void* chooseGhostAction(void* ghostArg){
                     break;
             }
         }
-        sem_post(&(currentRoom->mutex));
-        if(ghost->boredom <= 0)
+        // sem_post(&(currentRoom->mutex));
+        if(ghost->boredom <= 0) {
             printf("The ghost got bored and left");            
             break;
+        }
     }
 
     return 0;
@@ -101,7 +101,6 @@ void switchGhostRooms(GhostType* ghost){ // try wait bs gl
     ghost->currRoom->ghost = NULL;
     if(ghost->currRoom->next->size == 1) {
         roomToGo = ghost->currRoom->next->head->data;
-        return;
     }
 
 	int stop = randInt(0, ghost->currRoom->next->size);
@@ -110,15 +109,17 @@ void switchGhostRooms(GhostType* ghost){ // try wait bs gl
 	for(int i = 0; i < ghost->currRoom->next->size; ++i){
 		if(i == stop) {
 			roomToGo = curr->data;
-            printf("Ghost moved into %s.\n", curr->data->name);
 			break;
 		}
 		curr = curr->next;
 	}
-    if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its locked
-        ghost->currRoom = roomToGo;
-        ghost->currRoom->ghost = ghost;
-        sem_post(&(roomToGo->mutex));
-    }
+    // if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its locked
+    //     ghost->currRoom = roomToGo;
+    //     ghost->currRoom->ghost = ghost;
+    //     sem_post(&(roomToGo->mutex));
+    // }
+    ghost->currRoom = roomToGo;
+    ghost->currRoom->ghost = ghost;
+    printf("Ghost moved into %s.\n", ghost->currRoom->name);
 
 }
