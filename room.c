@@ -12,8 +12,9 @@ void initRoom(RoomType* room, char* name){
     room->ghost = NULL;
     room->hunterListSize = 0;
     // pthread_mutex_init(&room->mutex, NULL);
-    sem_init(&(room->mutex), 0, 0);
+    sem_init(&(room->mutex), 0, 1);
 }
+
 
 void initRoomList(RoomListType* list){
     list->head = NULL;

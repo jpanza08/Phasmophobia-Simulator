@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
    
     randomRoom(building.rooms, &gh, 0); //Giving ghost random room
     // printf("\nafter room");
-    printf("\nGhost is a: %s, and is in room: %s", getGhostName(gh.type), gh.currRoom->name);
+    printf("\nGhost is a: %s, and is in room: %s\n", getGhostName(gh.type), gh.currRoom->name);
     // printf("what kind of fuckeruy");
 
     //Initializing hunters
-    printf("\nEnter the first Hunter's name: ");
-    scanf("%s", name1);
-    initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
+    // printf("\nEnter the first Hunter's name: ");
+    // scanf("%s", name1);
+    // initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
    
     
     // printf("Enter the second Hunter's name: ");
@@ -43,23 +43,23 @@ int main(int argc, char *argv[])
 
     
     // //Adding hunters to rooms
-    addHunterToRoom(building.rooms->head->data, &hunter1);
+    // addHunterToRoom(building.rooms->head->data, &hunter1);
     // addHunterToRoom(building.rooms->head->data, &hunter2);
     // addHunterToRoom(building.rooms->head->data, &hunter3);
     // addHunterToRoom(building.rooms->head->data, &hunter4);
 
-    // pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
-    pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
+    pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
+    // pthread_create(&hunter1Thread, NULL, chooseAction, &hunter1);
     // pthread_create(&hunter2Thread, NULL, chooseAction, &hunter2);
     // pthread_create(&hunter3Thread, NULL, chooseAction,  &hunter3);
     // pthread_create(&hunter4Thread, NULL, chooseAction, &hunter4);
     
     //Cleanup stuff
-    pthread_join(hunter1Thread, NULL);
+    // pthread_join(hunter1Thread, NULL);
     // pthread_join(hunter2Thread, NULL);
     // pthread_join(hunter3Thread, NULL);
     // pthread_join(hunter4Thread, NULL);
-    // pthread_join(ghostThread, NULL);
+    pthread_join(ghostThread, NULL);
 
     //Threads finished, print results
     // scaredHunters(&building, &allScared);

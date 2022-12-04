@@ -66,7 +66,7 @@ void* chooseGhostAction(void* ghostArg){
     int random;
     while(1){
         RoomType* currentRoom = ghost->currRoom;
-        // sem_wait(&(currentRoom->mutex));
+        sem_wait(&(currentRoom->mutex));
         if(ghost->currRoom->hunterListSize != 0){
             ghost->boredom = BOREDOM_MAX;            
             random = randInt(1, 3);
@@ -85,7 +85,7 @@ void* chooseGhostAction(void* ghostArg){
                     break;
             }
         }
-        // sem_post(&(currentRoom->mutex));
+        sem_post(&(currentRoom->mutex));
         if(ghost->boredom <= 0) {
             printf("The ghost got bored and left");            
             break;

@@ -102,6 +102,7 @@ void collectEvidence(HunterType *hunter){
         while(current != NULL) {
             if(current->data->type == hunter->reads){
                 addEvidenceToHunter(hunter, current->data);
+                printf("Added %s to Hunter\n", getEvidenceName(current->data->type));
                 hunter->ghostlyEvidence++;
                 hunter->boredom = BOREDOM_MAX;
                 current = current->next;
@@ -197,8 +198,8 @@ void* chooseAction(void* hunterArg){
 		}
 		random = randInt(1, 4);
 		switch(random){
-			case(1): 
-				// collectEvidence(hunter);
+			case(1):
+				collectEvidence(hunter);
 				break;
 			case(2):
 				switchRoomsHunter(hunter);
