@@ -73,7 +73,7 @@ void* chooseGhostAction(void* ghostArg){
             if(random == 1) {
                 leaveEvidence(ghost->currRoom, ghost);
             }
-            printHunterList(ghost->currRoom);
+            // printHunterList(ghost->currRoom);
         } else {
             ghost->boredom--;
             random = randInt(1, 4);

@@ -48,6 +48,7 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
     int length = room->hunterListSize;
     int index;
+    printf("\n%d\n", length);
     if(length == 0) {
         printf("\nlist is empty\n");
     } else if(length == 1) {
@@ -60,7 +61,7 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
                 break;
             }
         }
-        for(int i = index - 1; i < length; ++i) {
+        for(int i = index; i < length - 1; ++i) {
             room->hunters[i] = room->hunters[i + 1];
         }
         room->hunterListSize--;
@@ -79,12 +80,12 @@ void switchRoomsHunter(HunterType *hunter){ // you must use try wait gl
     RoomType* roomToGo = hunter->room;
     // if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its not locked
         removeHunterFromRoom(hunter->room, hunter);
+        // printf("\n%d size of %s\n", hunter->roomx->hunterListSize, hunter->room->name);
         RoomListType* list = hunter->room->next;
         int stop = randInt(0,list->size);
         RoomNodeType *curr = list->head;
         for(int i = 0; i < list->size; ++i){
             if(i == stop){
-                hunter->room->hunterListSize--;
                 hunter->room = curr->data;
                 addHunterToRoom(curr->data, hunter);
                 printf("%s moved into %s.\n", hunter->name, curr->data->name);
@@ -137,7 +138,7 @@ void collectEvidence(HunterType *hunter){
 				break;
     	}
 		initEvidence(evRange, evType, 0, &ev);
-		// addEvidenceToHunter(hunter, &ev);
+		addEvidenceToHunter(hunter, &ev);
 	}
 }
 
@@ -151,7 +152,6 @@ void shareEvidence(HunterType *hunter) {
     if(hunter->room->hunterListSize > 1) {
         int random = randInt(0, hunter->room->hunterListSize);
         if(strcmp(hunter->name, hunter->room->hunters[random]->name) != 0) {
-            printf("%s shared evidence with %s.\n", hunter->room->hunters[random]->name, hunter->name);
             EvNodeType* current = hunter->room->evidence->head;
             while(current != NULL) {
                 switch (current->data->type) {
@@ -182,6 +182,8 @@ void shareEvidence(HunterType *hunter) {
                 }
                 current = current->next;
             }
+            // printf("%s shared %s with %s.\n", hunter->room->hunters[random]->name, getEvidenceName(hunter->evList->tail->data->type), hunter->name);
+
         }
     }
 }
@@ -208,7 +210,7 @@ void* chooseAction(void* hunterArg){
 		switch(random){
 			case(1):
                 printf("\n%s is collecting evidence in %s\n", hunter->name, hunter->room->name);
-				collectEvidence(hunter);
+				// collectEvidence(hunter);
 				break;
 			case(2):
                 printf("\n%s is switching rooms in %s\n", hunter->name, hunter->room->name);
@@ -218,7 +220,7 @@ void* chooseAction(void* hunterArg){
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
                     printf("\n%s is sharing evidence in %s\n", hunter->name, hunter->room->name);
-					// shareEvidence(hunter);
+					shareEvidence(hunter);
 				}
 				break;
 		}
