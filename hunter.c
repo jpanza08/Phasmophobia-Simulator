@@ -50,6 +50,9 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
     int index;
     if(length == 0) {
         printf("\nlist is empty\n");
+    } else if(length == 1) {
+        room->hunters[0] = NULL;
+        room->hunterListSize--;
     } else {
         for(int i = 0; i < length; ++i) {
             if(room->hunters[i]->id == h->id) {
@@ -73,20 +76,23 @@ void cleanupHunters(HunterType* hunters){
 
 
 void switchRoomsHunter(HunterType *hunter){ // you must use try wait gl
-    removeHunterFromRoom(hunter->room, hunter);
-    RoomListType* list = hunter->room->next;
-    int stop = randInt(0,list->size);
-    RoomNodeType *curr = list->head;
-    for(int i = 0; i < list->size; ++i){
-        if(i == stop){
-            hunter->room->hunterListSize--;
-            hunter->room = curr->data;
-            addHunterToRoom(curr->data, hunter);
-            printf("%s moved into %s.\n", hunter->name, curr->data->name);
-            return;
+    RoomType* roomToGo = hunter->room;
+    // if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its not locked
+        removeHunterFromRoom(hunter->room, hunter);
+        RoomListType* list = hunter->room->next;
+        int stop = randInt(0,list->size);
+        RoomNodeType *curr = list->head;
+        for(int i = 0; i < list->size; ++i){
+            if(i == stop){
+                hunter->room->hunterListSize--;
+                hunter->room = curr->data;
+                addHunterToRoom(curr->data, hunter);
+                printf("%s moved into %s.\n", hunter->name, curr->data->name);
+                return;
+            }
+            curr = curr->next;
         }
-        curr = curr->next;
-    }
+    // }
 }
 
 /*
@@ -108,6 +114,8 @@ void collectEvidence(HunterType *hunter){
                 current = current->next;
                 removeEvidenceRoom(hunter->room, temp->data);
                 temp = current;
+            } else {
+                current = current->next;
             }
         }
     } else {
@@ -199,17 +207,17 @@ void* chooseAction(void* hunterArg){
 		random = randInt(1, 4);
 		switch(random){
 			case(1):
-                printf("\n%s is collecting evidence\n", hunter->name);
+                printf("\n%s is collecting evidence in %s\n", hunter->name, hunter->room->name);
 				collectEvidence(hunter);
 				break;
 			case(2):
-                printf("\n%s is switching rooms\n", hunter->name);
-				// switchRoomsHunter(hunter);
+                printf("\n%s is switching rooms in %s\n", hunter->name, hunter->room->name);
+				switchRoomsHunter(hunter);
 				hunter->boredom--;
 				break;
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
-                    printf("\n%s is sharing evidence\n", hunter->name);
+                    printf("\n%s is sharing evidence in %s\n", hunter->name, hunter->room->name);
 					// shareEvidence(hunter);
 				}
 				break;

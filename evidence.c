@@ -58,7 +58,7 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
     if(room->evidence->head == NULL){
-        printf("Ghost left evidence in %s.\n", room->name);
+        printf("h Ghost left evidence in %s.\n", room->name);
         room->evidence->head = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
