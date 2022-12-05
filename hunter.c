@@ -129,7 +129,7 @@ void collectEvidence(HunterType *hunter){
 				break;
     	}
 		initEvidence(evRange, evType, 0, &ev);
-		addEvidenceToHunter(hunter, &ev);
+		// addEvidenceToHunter(hunter, &ev);
 	}
 }
 
@@ -148,13 +148,13 @@ void shareEvidence(HunterType *hunter) {
             while(current != NULL) {
                 switch (current->data->type) {
                     case EMF:
-                        if(current->data->value >= 4.7) {
+                        if(current->data->value >= 4.9) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case TEMPERATURE:
-                        if(-10 <= current->data->value && current->data->value <= 1.0) {
+                        if(-10 <= current->data->value && current->data->value <= 0) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
@@ -166,7 +166,7 @@ void shareEvidence(HunterType *hunter) {
                         }
                         break;
                     case SOUND:
-                        if(65 <= current->data->value && current->data->value <= 75) {
+                        if(70 <= current->data->value) {
                             addEvidenceToHunter(hunter->room->hunters[random], current->data);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
@@ -191,7 +191,7 @@ void* chooseAction(void* hunterArg){
 
     while(1){
         RoomType* currentRoom = hunter->room;
-        // sem_wait(&(currentRoom->mutex));
+        sem_wait(&(currentRoom->mutex));
         if(hunter->room->ghost != NULL){
             hunter->fear++;
             hunter->boredom = BOREDOM_MAX;
@@ -199,19 +199,22 @@ void* chooseAction(void* hunterArg){
 		random = randInt(1, 4);
 		switch(random){
 			case(1):
+                printf("\n%s is collecting evidence\n", hunter->name);
 				collectEvidence(hunter);
 				break;
 			case(2):
-				switchRoomsHunter(hunter);
+                printf("\n%s is switching rooms\n", hunter->name);
+				// switchRoomsHunter(hunter);
 				hunter->boredom--;
 				break;
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
+                    printf("\n%s is sharing evidence\n", hunter->name);
 					// shareEvidence(hunter);
 				}
 				break;
 		}
-        // sem_post(&(currentRoom->mutex));
+        sem_post(&(currentRoom->mutex));
 
         if(hunter->ghostlyEvidence >= 3){
             printf("%s got enough evidence to leave.\n", hunter->name);
@@ -225,6 +228,7 @@ void* chooseAction(void* hunterArg){
             printf("%s got bored and left\n", hunter->name);
             break;
         }
+        usleep(USLEEP_TIME);
     }
 
     return 0;

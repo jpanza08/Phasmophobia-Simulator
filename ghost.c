@@ -90,6 +90,7 @@ void* chooseGhostAction(void* ghostArg){
             printf("The ghost got bored and left");            
             break;
         }
+        usleep(USLEEP_TIME);
     }
 
     return 0;
@@ -113,13 +114,13 @@ void switchGhostRooms(GhostType* ghost){ // try wait bs gl
 		}
 		curr = curr->next;
 	}
-    // if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its locked
-    //     ghost->currRoom = roomToGo;
-    //     ghost->currRoom->ghost = ghost;
-    //     sem_post(&(roomToGo->mutex));
-    // }
-    ghost->currRoom = roomToGo;
-    ghost->currRoom->ghost = ghost;
+    if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its not locked
+        ghost->currRoom = roomToGo;
+        ghost->currRoom->ghost = ghost;
+        sem_post(&(roomToGo->mutex));
+    }
+    // ghost->currRoom = roomToGo;
+    // ghost->currRoom->ghost = ghost;
     printf("Ghost moved into %s.\n", ghost->currRoom->name);
 
 }
