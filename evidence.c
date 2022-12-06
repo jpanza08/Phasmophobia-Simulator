@@ -94,12 +94,10 @@ void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
 
 void printEvidenceList(EvidenceListType* list) {
     EvNodeType* current = list->head;
-    printf("\n");
     while(current != NULL) {
         printf("type: %s ", getEvidenceName(current->data->type));
         current = current->next;
     }
-    printf("\n");
 }
 
 /*

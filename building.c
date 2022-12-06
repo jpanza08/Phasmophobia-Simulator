@@ -20,15 +20,18 @@
 
 void initBuilding(GhostType *ghost,BuildingType *b){
     RoomListType* roomList = (RoomListType*)malloc(sizeof(RoomListType));
-
+    b->rooms = NULL;
     b->ghost = ghost;
+    ghost->building = b;
     b->rooms = roomList;
     b->hunterListSize = 0;
+    sem_init(&(b->mutex), 0, 1);
 }
 
 void addHunterToBuilding(HunterType* hunter, BuildingType* b){
+    hunter->building = b;
     b->hunters[b->hunterListSize] = hunter;
-    b->hunterListSize++;
+    // b->hunterListSize++;
 }
 
 /*
@@ -92,7 +95,6 @@ void populateRooms(BuildingType* building) {
 
 //     // Now connect the rooms. It is possible you do not need a separate
 //     // function for this, but it is provided to give you a starting point.
-   
    
     connectRooms(van, hallway);
     connectRooms(hallway, master_bedroom);

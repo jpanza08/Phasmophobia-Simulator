@@ -22,6 +22,14 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
 }
 
 void leaveEvidence(RoomType* room, GhostType* ghost) {
+    // while(1){
+    //     if(sem_trywait(&(room->mutex)) == 0){
+    //         break;
+    //     }
+    // }
+    if(sem_trywait(&(room->mutex)) != 0){
+        return;
+    }
     EvidenceType evLeft;
     float evRange;
     EvidenceEnumType et; //case for ghost type
@@ -59,6 +67,7 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     }
     initEvidence(evRange, et, 1, &evLeft);
     addEvidenceToRoom(room, &evLeft);
+    sem_post(&(room->mutex));
 }
 
 void* chooseGhostAction(void* ghostArg){
@@ -66,7 +75,6 @@ void* chooseGhostAction(void* ghostArg){
     int random;
     while(1){
         RoomType* currentRoom = ghost->currRoom;
-        sem_wait(&(currentRoom->mutex));
         if(ghost->currRoom->hunterListSize != 0){
             ghost->boredom = BOREDOM_MAX;            
             random = randInt(1, 3);
@@ -86,42 +94,57 @@ void* chooseGhostAction(void* ghostArg){
                     break;
             }
         }
-        sem_post(&(currentRoom->mutex));
         if(ghost->boredom <= 0) {
-            printf("The ghost got bored and left");            
+            printf("The ghost got bored and left.\n");            
+            ghost->currRoom->ghost = NULL;
             break;
         }
+        
+        // if(ghost->building->hunterListSize <=0){
+        //     printf("The ghost wins!");
+        //     ghost->currRoom->ghost = NULL;
+        //     break;
+        // }
         usleep(USLEEP_TIME);
     }
-
     return 0;
 }
 
 
 void switchGhostRooms(GhostType* ghost){ // try wait bs gl
-    RoomType* roomToGo;
-    ghost->currRoom->ghost = NULL;
-    if(ghost->currRoom->next->size == 1) {
-        roomToGo = ghost->currRoom->next->head->data;
+    RoomType* current = ghost->currRoom;
+    RoomType* destination = NULL;
+    RoomListType* list = ghost->currRoom->next;
+    RoomNodeType *curr = list->head;
+   
+    int stop = randInt(0,list->size);
+   
+
+    for(int i = 0; i < list->size; ++i){
+            if(i == stop){
+                destination = curr->data;
+                break;
+            }
+            curr = curr->next;
     }
 
-	int stop = randInt(0, ghost->currRoom->next->size);
-	RoomNodeType *curr = ghost->currRoom->next->head;
+        // If the hunter's room is available for modification, lock it
+        if (sem_trywait(&(ghost->currRoom->mutex)) == 0) {
+            // If the new room is *not* available for modification, unlock the hunter's room and return nothing
+            if(sem_trywait(&(destination->mutex)) != 0) {
+                // We must remember to unlock the locked current room
+                sem_post(&(ghost->currRoom->mutex));
+                return;
+            }
+        }
+        //If we make it here, the current and next rooms are locked
+        ghost->currRoom->ghost = NULL;
+        ghost->currRoom = destination;
+        destination->ghost = ghost;
+        printf("Ghost moved into %s.\n", destination->name);
+        
 
-	for(int i = 0; i < ghost->currRoom->next->size; ++i){
-		if(i == stop) {
-			roomToGo = curr->data;
-			break;
-		}
-		curr = curr->next;
-	}
-    if(sem_trywait(&(roomToGo->mutex)) == 0) { //0 is when its not locked
-        ghost->currRoom = roomToGo;
-        ghost->currRoom->ghost = ghost;
-        sem_post(&(roomToGo->mutex));
-    }
-    // ghost->currRoom = roomToGo;
-    // ghost->currRoom->ghost = ghost;
-    printf("Ghost moved into %s.\n", ghost->currRoom->name);
+        sem_post(&(current->mutex));
+        sem_post(&(ghost->currRoom->mutex));
 
 }

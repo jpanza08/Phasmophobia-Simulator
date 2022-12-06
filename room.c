@@ -1,17 +1,16 @@
 #include "defs.h"
 
 void initRoom(RoomType* room, char* name){
-    RoomListType* roomList = (RoomListType*)malloc(sizeof(RoomListType));
+    
+  
     EvidenceListType* evList = (EvidenceListType*)malloc(sizeof(EvidenceListType));
-
+    room->next = (RoomListType*)malloc(sizeof(RoomListType));
     strcpy(room->name, name);
-    initRoomList(roomList);
+    initRoomList(room->next);
     initEvidenceList(evList);
     room->evidence = evList;
-    room->next = roomList;
     room->ghost = NULL;
     room->hunterListSize = 0;
-    // pthread_mutex_init(&room->mutex, NULL);
     sem_init(&(room->mutex), 0, 1);
 }
 
@@ -34,7 +33,7 @@ void appendRoom(RoomListType *list, RoomType *room){
     newNode->data = room;
 
     //Empty
-    if(list->head == NULL){
+    if(list->size == 0){
         list->head = newNode;
         list->tail = newNode;
     }else{
@@ -49,7 +48,7 @@ void appendRoom(RoomListType *list, RoomType *room){
   Purpose:   connects two rooms together
        in:   room 1
        in:   room 2
-      out:   updated roomlist for room1 and room2
+      out:   updated roomList for room1 and room2
 */
 void connectRooms(RoomType *r1, RoomType* r2){
     appendRoom(r1->next, r2);

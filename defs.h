@@ -7,14 +7,31 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define MAX_STR            64
-#define FEAR_RATE           1
-#define MAX_FEAR          100
-#define MAX_HUNTERS         4
-#define USLEEP_TIME     50000
-#define BOREDOM_MAX        99
-#define C_NOK               0
-#define C_OK                1
+#define MAX_STR                 64
+#define FEAR_RATE                1
+#define MAX_FEAR               100
+#define MAX_HUNTERS              4
+#define USLEEP_TIME          50000
+#define BOREDOM_MAX             99
+#define C_NOK                    0
+#define C_OK                     1
+
+#define EMF_MIN_STANDARD         0
+#define EMF_MAX_STANDARD      4.90
+#define EMF_MIN_GHOST         4.70
+#define EMF_MAX_GHOST         5.00
+#define TEMP_MIN_STANDARD        0
+#define TEMP_MAX_STANDARD    27.00
+#define TEMP_MIN_GHOST      -10.00
+#define TEMP_MAX_GHOST        1.00
+#define FINGERPRINT_STANDARD     0
+#define FINGERPRINT_GHOST        1
+#define SOUND_MIN_STANDARD   40.00
+#define SOUND_MAX_STANDARD   70.00
+#define SOUND_MIN_GHOST      65.00
+#define SOUND_MAX_GHOST      75.00
+
+
 
 typedef enum { EMF, TEMPERATURE, FINGERPRINTS, SOUND } EvidenceEnumType;
 typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
@@ -24,6 +41,7 @@ typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
 typedef struct {
   GhostEnumType type;
   struct RoomType *currRoom;
+   struct BuildingType *building;
   int boredom;
 } GhostType;
 
@@ -34,19 +52,20 @@ typedef struct RoomType {
   struct EvidenceListType* evidence;
   struct HunterType* hunters[4];
   int hunterListSize;
-  // pthread_mutex_t mutex;
   sem_t mutex;
 } RoomType;
 
 typedef struct HunterType {
   RoomType *room;
   EvidenceEnumType reads;
+  struct BuildingType *building;
   struct EvidenceListType* evList;
   int fear;
   int boredom;
   char name[MAX_STR];
   int id;
   int ghostlyEvidence;
+
 } HunterType;
 
 typedef struct BuildingType {
@@ -54,6 +73,7 @@ typedef struct BuildingType {
   HunterType* hunters[4];
   struct RoomListType* rooms;
   int hunterListSize;
+  sem_t mutex;
 }BuildingType;
 
 typedef struct EvidenceType{
