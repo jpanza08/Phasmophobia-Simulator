@@ -7,42 +7,42 @@ int main(int argc, char *argv[])
    
     GhostType gh;
     HunterType hunter1, hunter2, hunter3, hunter4;
-    BuildingType *building = (BuildingType*) malloc(sizeof(BuildingType));
+    BuildingType building;
     char name1[MAX_STR], name2[MAX_STR], name3[MAX_STR], name4[MAX_STR];
     pthread_t hunter1Thread, hunter2Thread, hunter3Thread, hunter4Thread, ghostThread;
     int allScared = 0;
     //Building initialization
-    initBuilding(&gh, building);
-    populateRooms(building);
+    initBuilding(&gh, &building);
+    populateRooms(&building);
     //Creating ghost
     initGhost(NULL, randInt(0,4), &gh);
     
 
-    randomRoom(building->rooms, &gh, 0); //Giving ghost random room
+    randomRoom(building.rooms, &gh, 0); //Giving ghost random room
     printf("\nGhost is a: %s, and is in room: %s\n", getGhostName(gh.type), gh.currRoom->name);
 
     //Initializing hunters
     printf("\nEnter the first Hunter's name: ");
     scanf("%s", name1);
-    initHunter(building->rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
+    initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
    
     printf("Enter the second Hunter's name: ");
     scanf("%s", name2);
-    initHunter(building->rooms->head->data, EMF, name2, 2, &hunter2);
+    initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
 
     printf("Enter the third Hunter's name: ");
     scanf("%s", name3);
-    initHunter(building->rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
+    initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
     
     printf("Enter the fourth Hunter's name: ");
     scanf("%s", name4);
-    initHunter(building->rooms->head->data, SOUND, name4, 4, &hunter4);
+    initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
 
     // //Adding hunters to rooms
-    addHunterToRoom(building->rooms->head->data, &hunter1);
-    addHunterToRoom(building->rooms->head->data, &hunter2);
-    addHunterToRoom(building->rooms->head->data, &hunter3);
-    addHunterToRoom(building->rooms->head->data, &hunter4);
+    addHunterToRoom(building.rooms->head->data, &hunter1);
+    addHunterToRoom(building.rooms->head->data, &hunter2);
+    addHunterToRoom(building.rooms->head->data, &hunter3);
+    addHunterToRoom(building.rooms->head->data, &hunter4);
 
     //Creating threads
     pthread_create(&ghostThread, NULL, chooseGhostAction, &gh);
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     pthread_join(hunter2Thread, NULL);
     pthread_join(hunter3Thread, NULL);
     pthread_join(hunter4Thread, NULL);
+
     
 
     //Threads finished, print results
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     free(hunter2.evList);
     free(hunter3.evList);
     free(hunter4.evList);
-    cleanupBuilding(building);
+    cleanupBuilding(&building);
     printf("\nSimulation complete.\n");
 
     

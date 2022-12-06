@@ -120,11 +120,6 @@ void switchRoomsHunter(HunterType *hunter){
       out:   updated hunter evidence
 */
 void collectEvidence(HunterType *hunter){
-    // while(1){
-    //     if(sem_trywait(&(hunter->room->mutex)) == 0){
-    //         break;
-    //     }
-    // }
     if(sem_trywait(&(hunter->room->mutex)) != 0){
         return;
     }
