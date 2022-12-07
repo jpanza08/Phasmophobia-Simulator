@@ -25,7 +25,7 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     if(sem_trywait(&(room->mutex)) != 0){
         return;
     }
-    EvidenceType evLeft;
+    EvidenceType *evLeft = (EvidenceType*) calloc(1, sizeof(EvidenceType));
     float evRange;
     EvidenceEnumType et; //case for ghost type
 
@@ -61,8 +61,8 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
             evRange = randFloat(SOUND_MIN_GHOST, SOUND_MAX_GHOST);
             break;
     }
-    initEvidence(evRange, et, 1, &evLeft);
-    addEvidenceToRoom(room, &evLeft);
+    initEvidence(evRange, et, 1, evLeft);
+    addEvidenceToRoom(room, evLeft);
     sem_post(&(room->mutex));
 }
 

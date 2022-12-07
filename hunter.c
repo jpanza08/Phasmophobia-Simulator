@@ -19,7 +19,6 @@ void addEvidenceToHunter(HunterType* h, EvidenceType* ev) {
 
 void printHunterEvidence(HunterType* h) {
     // printEvidenceList(h->evList);
-    EvNodeType* current = h->evList->head;
 }
 
 /*
@@ -144,7 +143,7 @@ void collectEvidence(HunterType *hunter){
     int evRange; 
     EvNodeType *curr =  hunter->room->evidence->head;
     EvNodeType *prev = curr; 
-    EvidenceType leftEvidence;
+    EvidenceType *leftEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
     
     if(hunter->room->evidence->size == 0){
         switch(hunter->reads) {
@@ -161,8 +160,8 @@ void collectEvidence(HunterType *hunter){
                 evRange = randFloat(40, 75);
                 break;
         }
-        initEvidence(evRange, hunter->reads, 0, &leftEvidence);
-        addEvidenceToHunter(hunter, &leftEvidence);
+        initEvidence(evRange, hunter->reads, 0, leftEvidence);
+        addEvidenceToHunter(hunter, leftEvidence);
         return;
     }
     
