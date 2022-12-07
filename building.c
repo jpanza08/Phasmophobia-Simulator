@@ -20,11 +20,13 @@
 
 void initBuilding(GhostType *ghost,BuildingType *b){
     RoomListType* roomList = (RoomListType*)calloc(1, sizeof(RoomListType));
+    EvidenceListType* evList = (EvidenceListType*) calloc(1, sizeof(EvidenceListType));
     b->rooms = NULL;
     b->ghost = ghost;
     ghost->building = b;
     b->rooms = roomList;
     b->hunterListSize = 0;
+    b->masterEvList = evList;
     sem_init(&(b->mutex), 0, 1);
 }
 
@@ -42,6 +44,7 @@ void addHunterToBuilding(HunterType* hunter, BuildingType* b){
 */
 void cleanupBuilding(BuildingType* building){
     cleanupRoomList(building->rooms);
+    free(building->rooms);
 }
 
 void populateRooms(BuildingType* building) {

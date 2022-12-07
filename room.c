@@ -1,8 +1,6 @@
 #include "defs.h"
 
 void initRoom(RoomType* room, char* name){
-    
-  
     EvidenceListType* evList = (EvidenceListType*)calloc(1,sizeof(EvidenceListType));
     room->next = (RoomListType*)calloc(1,sizeof(RoomListType));
     strcpy(room->name, name);
@@ -11,7 +9,9 @@ void initRoom(RoomType* room, char* name){
     room->evidence = evList;
     room->ghost = NULL;
     room->hunterListSize = 0;
+    //room->building = building;
     sem_init(&(room->mutex), 0, 1);
+    
 }
 
 
@@ -82,14 +82,11 @@ void cleanupRoomData(RoomListType* list){
     next = curr->next;
 
     while(curr->next != NULL){
-        cleanupEvidenceList(curr->data->evidence);
-        free(curr->data->evidence);
         free(curr);
         curr = next;
         next = curr->next;
     }
-    cleanupEvidenceList(curr->data->evidence);
-    free(curr->data->evidence);
+    
     free(curr);
 }
 
@@ -108,22 +105,24 @@ void cleanupRoomList(RoomListType *list){
         next = curr->next;
     }
     cleanupRoomData(curr->data->next);
+    
     curr = list->head;
     next = curr->next;
     while(curr->next != NULL){
         free(curr->data->next);
+        cleanupEvidenceList(curr->data->evidence);
+        free(curr->data->evidence);
         free(curr->data);
         free(curr);
         curr = next;
         next = curr->next;
-
     }
     free(curr->data->next);
     cleanupEvidenceList(curr->data->evidence);
     free(curr->data->evidence);
     free(curr->data);
     free(curr);
-    free(list);
+    
 }
 
 void printRooms(RoomListType *list){
@@ -174,4 +173,32 @@ void randomRoom(RoomListType *list, GhostType *ghost, int van){
             }
         }
     }
+}
+
+
+/*
+ Function:   cleanupRoomList
+  Purpose:   deallocates memory used by RoomList
+       in:   roomlist
+      out:   updated roomlist
+*/
+void cleanupMasterRoomList(RoomListType *list){
+    RoomNodeType *curr = list->head;
+    RoomNodeType *next = curr->next;
+    while(curr->next != NULL){
+        cleanupEvidenceList(curr->data->evidence);
+        free(curr->data->evidence);
+        free(curr->data->next);
+        free(curr->data);
+        free(curr);
+        curr = next;
+        next = curr->next;
+    }
+    cleanupEvidenceList(curr->data->evidence);
+    free(curr->data->evidence);
+    cleanupRoomList(curr->data->next);
+    free(curr->data->next);
+    free(curr->data);
+    free(curr);
+    
 }

@@ -72,6 +72,7 @@ typedef struct BuildingType {
   GhostType *ghost;
   HunterType* hunters[4];
   struct RoomListType* rooms;
+  struct EvidenceListType* masterEvList;
   int hunterListSize;
   sem_t mutex;
 }BuildingType;

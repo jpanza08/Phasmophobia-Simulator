@@ -62,11 +62,15 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
         room->evidence->head = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
+        // free(newNode);
+
     }else{
         printf("Ghost left evidence in %s.\n", room->name);
         room->evidence->tail->next = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
+        free(newNode);
+
     }
 }
 
@@ -130,5 +134,6 @@ void cleanupEvidenceList(EvidenceListType *list){
         curr = next;
         next = curr->next;
     }
+    free(curr->data);
     free(curr);
 }

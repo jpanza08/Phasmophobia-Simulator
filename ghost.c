@@ -25,7 +25,7 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     if(sem_trywait(&(room->mutex)) != 0){
         return;
     }
-    EvidenceType *evLeft = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+    EvidenceType *evLeft = (EvidenceType*) calloc(1,sizeof(EvidenceType));
     float evRange;
     EvidenceEnumType et; //case for ghost type
 
@@ -49,7 +49,6 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     switch(et) {
         case EMF:
             evRange = randFloat(EMF_MIN_GHOST, EMF_MAX_GHOST);
-            
             break;
         case TEMPERATURE:
             evRange = randFloat(TEMP_MIN_GHOST, TEMP_MAX_GHOST);
@@ -62,7 +61,7 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
             break;
     }
     initEvidence(evRange, et, 1, evLeft);
-    addEvidenceToRoom(room, evLeft);
+    addEvidence(room->evidence, evLeft);
     sem_post(&(room->mutex));
 }
 
