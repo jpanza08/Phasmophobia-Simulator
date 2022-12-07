@@ -132,12 +132,12 @@ int main(int argc, char *argv[])
 
     
     
-    // cleanupHunters(&hunter1);
-    // cleanupHunters(&hunter2);
-    // cleanupHunters(&hunter3);
-    // cleanupHunters(&hunter4);
+    cleanupHunters(&hunter1);
+    cleanupHunters(&hunter2);
+    cleanupHunters(&hunter3);
+    cleanupHunters(&hunter4);
 
-    // cleanupBuilding(&building);
+    cleanupBuilding(&building);
     printf("\nSimulation complete.\n");
 
     
