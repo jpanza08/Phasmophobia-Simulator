@@ -19,7 +19,7 @@
 */
 
 void initBuilding(GhostType *ghost,BuildingType *b){
-    RoomListType* roomList = (RoomListType*)malloc(sizeof(RoomListType));
+    RoomListType* roomList = (RoomListType*)calloc(1, sizeof(RoomListType));
     b->rooms = NULL;
     b->ghost = ghost;
     ghost->building = b;

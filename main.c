@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     //     // }
     //     printHunterEvidence(building.hunters[i]);
     // }
-    // printHunterEvidence(&hunter1);
+    printHunterEvidence(&hunter1);
     // printHunterEvidence(&hunter2);
     // printHunterEvidence(&hunter3);
     // printHunterEvidence(&hunter4);

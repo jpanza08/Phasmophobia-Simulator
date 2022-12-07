@@ -1,7 +1,7 @@
 #include "defs.h"
 
 void initHunter(RoomType* room, EvidenceEnumType reads, char* name, int id, HunterType* h){
-    EvidenceListType* evFound = (EvidenceListType*)malloc(sizeof(EvidenceListType));
+    EvidenceListType* evFound = (EvidenceListType*)calloc(1, sizeof(EvidenceListType));
     
     h->evList = evFound;
     h->room = room;
@@ -18,7 +18,8 @@ void addEvidenceToHunter(HunterType* h, EvidenceType* ev) {
 }
 
 void printHunterEvidence(HunterType* h) {
-    printEvidenceList(h->evList);
+    // printEvidenceList(h->evList);
+    EvNodeType* current = h->evList->head;
 }
 
 /*
@@ -68,6 +69,12 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
     }
 }
 
+/*
+ Function:   cleanupHunters
+  Purpose:   frees all memory used up by hunters
+       in:   hunter
+      out:   cleaned up hunter 
+*/
 void cleanupHunters(HunterType* hunters){
     EvNodeType* current = hunters->evList->head;
     EvNodeType* temp;
@@ -79,7 +86,12 @@ void cleanupHunters(HunterType* hunters){
     free(hunters->evList);
 }
 
-
+/*
+ Function:   switchRoomsHunter
+  Purpose:   switches room that the hunter is currently in
+       in:   hunter
+      out:   updated hunter room
+*/
 void switchRoomsHunter(HunterType *hunter){ 
     RoomType* current = hunter->room;
     RoomType* destination = NULL;
@@ -180,10 +192,11 @@ void collectEvidence(HunterType *hunter){
       out:   updated hunter evidence
 */
 void shareEvidence(HunterType *hunter) {
+    EvNodeType* current = NULL;
     if(hunter->room->hunterListSize > 1) {
         int random = randInt(0, hunter->room->hunterListSize);
         if(strcmp(hunter->name, hunter->room->hunters[random]->name) != 0) {
-            EvNodeType* current = hunter->evList->head;
+            current = hunter->evList->head;
             while(current != NULL) {
                 switch (current->data->type) {
                     case EMF:
@@ -239,7 +252,7 @@ void* chooseAction(void* hunterArg){
 			case(1):
                 printf("%s is collecting evidence in %s\n", hunter->name, hunter->room->name);
 				collectEvidence(hunter);
-                printEvidenceList(hunter->evList);
+                // printEvidenceList(hunter->evList);
 				break;
 			case(2):
                 printf("%s is switching rooms in %s\n", hunter->name, hunter->room->name);
@@ -249,7 +262,7 @@ void* chooseAction(void* hunterArg){
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
                     printf("%s is sharing evidence in %s\n", hunter->name, hunter->room->name);
-					shareEvidence(hunter);
+					// shareEvidence(hunter);
                     hunter->boredom--;
 				}
 				break;

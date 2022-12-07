@@ -99,7 +99,12 @@ void* chooseGhostAction(void* ghostArg){
     return 0;
 }
 
-
+/*
+ Function:   switchGhostRooms
+  Purpose:   switches room that the hunter is currently in
+       in:   hunter
+      out:   updated hunter room
+*/
 void switchGhostRooms(GhostType* ghost){
     RoomType* current = ghost->currRoom;
     RoomType* destination = NULL;

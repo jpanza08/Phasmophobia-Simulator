@@ -35,9 +35,8 @@ void initEvidenceList(EvidenceListType *list){
       out:   updated evidencelist for evidence
 */
 void addEvidence(EvidenceListType *list, EvidenceType *ev){
-    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
+    EvNodeType* newNode = (EvNodeType*) calloc(1, sizeof(EvNodeType));
     newNode->data = ev;
-    printf("%f", newNode->data->value);
     if(list->head == NULL){
         list->head = newNode;
         list->tail = newNode;
@@ -56,7 +55,7 @@ void addEvidence(EvidenceListType *list, EvidenceType *ev){
        in:   evidence to be added to the room 
 */
 void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
-    EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
+    EvNodeType* newNode = (EvNodeType*) calloc(1, sizeof(EvNodeType));
     newNode->data = ev;
     if(room->evidence->head == NULL){
         printf("Ghost left evidence in %s.\n", room->name);
@@ -93,6 +92,12 @@ void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
     }
 }
 
+/*
+ Function:   printEvidenceList
+  Purpose:   prints out evidence list
+       in:   evidence list
+      out:   printed evidence list
+*/
 void printEvidenceList(EvidenceListType* list) {
     EvNodeType* current = list->head;
     while(current != NULL) {
