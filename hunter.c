@@ -8,7 +8,7 @@ void initHunter(RoomType* room, EvidenceEnumType reads, char* name, int id, Hunt
     h->reads = reads;
     strcpy(h->name, name);
     h->fear = 0;
-    h->boredom = 6;
+    h->boredom = BOREDOM_MAX;
     h->id = id;
     h->ghostlyEvidence = 0;
 }
@@ -69,10 +69,14 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
 }
 
 void cleanupHunters(HunterType* hunters){
-    for(int i = 0; i < 4; ++i){
-        free(hunters[i].evList);
+    EvNodeType* current = hunters->evList->head;
+    EvNodeType* temp;
+    while(current != NULL) {
+        temp = current;
+        current = current->next;
+        free(temp);
     }
-
+    free(hunters->evList);
 }
 
 
@@ -135,13 +139,10 @@ void collectEvidence(HunterType *hunter){
             prev->next = curr->next;
             evFlag = 1;
             break;
-
         }
 
         prev = curr;
         curr = curr->next;
-
-
     }
 
     if(!evFlag){
@@ -206,8 +207,6 @@ void shareEvidence(HunterType *hunter) {
                 }
                 current = current->next;
             }
-            // printf("%s shared %s with %s.\n", hunter->room->hunters[random]->name, getEvidenceName(hunter->evList->tail->data->type), hunter->name);
-
         }
     }
 }
@@ -244,12 +243,13 @@ void* chooseAction(void* hunterArg){
 				if(hunter->room->hunterListSize > 1) {
                     printf("%s is sharing evidence in %s\n", hunter->name, hunter->room->name);
 					shareEvidence(hunter);
+                    hunter->boredom--;
 				}
 				break;
 		}
         
 
-        if(hunter->ghostlyEvidence >= 3){
+        if(hunter->evList->size >= 3){
             printf("%s got enough evidence to leave.\n", hunter->name);
             removeHunterFromRoom(hunter->room, hunter);
             // sem_wait(&(hunter->building->mutex));

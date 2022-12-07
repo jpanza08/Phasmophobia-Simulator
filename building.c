@@ -31,7 +31,7 @@ void initBuilding(GhostType *ghost,BuildingType *b){
 void addHunterToBuilding(HunterType* hunter, BuildingType* b){
     hunter->building = b;
     b->hunters[b->hunterListSize] = hunter;
-    // b->hunterListSize++;
+    b->hunterListSize++;
 }
 
 /*

@@ -81,7 +81,6 @@ void* chooseGhostAction(void* ghostArg){
             if(random == 1) {
                 leaveEvidence(ghost->currRoom, ghost);
             }
-            // printHunterList(ghost->currRoom);
         } else {
             ghost->boredom--;
             random = randInt(1, 4);
@@ -99,12 +98,6 @@ void* chooseGhostAction(void* ghostArg){
             ghost->currRoom->ghost = NULL;
             break;
         }
-        
-        // if(ghost->building->hunterListSize <=0){
-        //     printf("The ghost wins!");
-        //     ghost->currRoom->ghost = NULL;
-        //     break;
-        // }
         usleep(USLEEP_TIME);
     }
     return 0;

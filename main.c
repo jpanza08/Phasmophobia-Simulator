@@ -25,18 +25,24 @@ int main(int argc, char *argv[])
     printf("\nEnter the first Hunter's name: ");
     scanf("%s", name1);
     initHunter(building.rooms->head->data, FINGERPRINTS, name1, 1, &hunter1);
+    addHunterToBuilding(&hunter1, &building);
    
     printf("Enter the second Hunter's name: ");
     scanf("%s", name2);
     initHunter(building.rooms->head->data, EMF, name2, 2, &hunter2);
+    addHunterToBuilding(&hunter2, &building);
+
 
     printf("Enter the third Hunter's name: ");
     scanf("%s", name3);
     initHunter(building.rooms->head->data, TEMPERATURE, name3, 3, &hunter3);
+    addHunterToBuilding(&hunter3, &building);
     
     printf("Enter the fourth Hunter's name: ");
     scanf("%s", name4);
     initHunter(building.rooms->head->data, SOUND, name4, 4, &hunter4);
+    addHunterToBuilding(&hunter4, &building);
+
 
     // //Adding hunters to rooms
     addHunterToRoom(building.rooms->head->data, &hunter1);
@@ -59,19 +65,50 @@ int main(int argc, char *argv[])
     pthread_join(hunter4Thread, NULL);
 
     
+    printf("\n-------");
+    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter1.name, hunter1.evList->size, hunter1.fear, hunter1.boredom);
+    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter2.name, hunter2.evList->size, hunter2.fear, hunter2.boredom);
+    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter3.name, hunter3.evList->size, hunter3.fear, hunter3.boredom);
+    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter4.name, hunter4.evList->size, hunter4.fear, hunter4.boredom);
+    printf("\n-------");
 
-    //Threads finished, print results
-    // if(!allScared){
-    //     //TODO: Create guess ghost function
-    // }else{
-    //     printf("\nThe Hunters were too scared, the Ghost wins! It was a %s.", getGhostName(gh.type));
-    // }
+    int ctr = 0;
+    if(hunter1.fear >= 100) {
+        printf("\n%s got scared with a %d fear", hunter1.name, hunter1.fear);
+        ctr++;
+    }
+    if(hunter2.fear >= 100) {
+        printf("\n%s got scared with a %d fear", hunter2.name, hunter2.fear);
+        ctr++;
+    }
+    if(hunter3.fear >= 100) {
+        printf("\n%s got scared with a %d fear", hunter3.name, hunter3.fear);
+        ctr++;
+    }
+    if(hunter4.fear >= 100) {
+        printf("\n%s got scared with a %d fear", hunter4.name, hunter4.fear);
+        ctr++;
+    }
+    printf("\n-------");
+
+    if(ctr == 4) {
+        printf("\nGhost is a: %s, and has won the game\n", getGhostName(gh.type));
+    } else {
+        printf("\nhello");
+    }
+
+
+    for(int i = 0; i < building.hunterListSize; ++i) {
+        if(building.hunters[i]->fear < 100) {
+            break;
+        }
+    }
     
-    //Maybe make a function for this
-    free(hunter1.evList);
-    free(hunter2.evList);
-    free(hunter3.evList);
-    free(hunter4.evList);
+    cleanupHunters(&hunter1);
+    cleanupHunters(&hunter2);
+    cleanupHunters(&hunter3);
+    cleanupHunters(&hunter4);
+
     cleanupBuilding(&building);
     printf("\nSimulation complete.\n");
 
