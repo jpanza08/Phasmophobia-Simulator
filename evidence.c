@@ -37,6 +37,7 @@ void initEvidenceList(EvidenceListType *list){
 void addEvidence(EvidenceListType *list, EvidenceType *ev){
     EvNodeType* newNode = (EvNodeType*) malloc(sizeof(EvNodeType));
     newNode->data = ev;
+    printf("%f", newNode->data->value);
     if(list->head == NULL){
         list->head = newNode;
         list->tail = newNode;
@@ -95,7 +96,8 @@ void removeEvidenceRoom(RoomType *room, EvidenceType *ev) {
 void printEvidenceList(EvidenceListType* list) {
     EvNodeType* current = list->head;
     while(current != NULL) {
-        printf("type: %s ", getEvidenceName(current->data->type));
+        // printf("\ntype: %d ", getEvidenceName(current->data->type));
+        // printf("\ntype: %d ", current->data->type);
         current = current->next;
     }
 }

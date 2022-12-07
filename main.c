@@ -93,41 +93,44 @@ int main(int argc, char *argv[])
 
     if(ctr == 4) {
         printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type));
-    } else {
-       
-    }
+    } 
     
-    GhostEnumType types[3];
-    switch(gh.type){
-        case(POLTERGEIST):
-            types[0] = EMF;
-            types[1] = TEMPERATURE;
-            types[2] = FINGERPRINTS;
-            break;
-        case(BANSHEE):
-            types[0] = EMF;
-            types[1] = TEMPERATURE;
-            types[2] = SOUND;
-            break;
-        case(PHANTOM):
-            types[0] = TEMPERATURE;
-            types[1] = FINGERPRINTS;
-            types[2] = SOUND;
-            break;
-        case(BULLIES):
-            types[0] = EMF;
-            types[1] = FINGERPRINTS;
-            types[2] = SOUND;
-            break;
-    }
+    // GhostEnumType types[3];
+    // switch(gh.type){
+    //     case(POLTERGEIST):
+    //         types[0] = EMF;
+    //         types[1] = TEMPERATURE;
+    //         types[2] = FINGERPRINTS;
+    //         break;
+    //     case(BANSHEE):
+    //         types[0] = EMF;
+    //         types[1] = TEMPERATURE;
+    //         types[2] = SOUND;
+    //         break;
+    //     case(PHANTOM):
+    //         types[0] = TEMPERATURE;
+    //         types[1] = FINGERPRINTS;
+    //         types[2] = SOUND;
+    //         break;
+    //     case(BULLIES):
+    //         types[0] = EMF;
+    //         types[1] = FINGERPRINTS;
+    //         types[2] = SOUND;
+    //         break;
+    // }
     
-    for(int i = 0; i < 4; ++i){
-        if(building.hunters[i]->fear < 100){
-            //Check against each type of evidence I guess
+    // for(int i = 0; i < 4; ++i){
+    //     // if(building.hunters[i]->fear < 100){
+    //     //     //Check against each type of evidence I guess
 
-        }
+    //     // }
+    //     printHunterEvidence(building.hunters[i]);
+    // }
+    // printHunterEvidence(&hunter1);
+    // printHunterEvidence(&hunter2);
+    // printHunterEvidence(&hunter3);
+    // printHunterEvidence(&hunter4);
 
-    }
     
     
     cleanupHunters(&hunter1);
@@ -136,6 +139,7 @@ int main(int argc, char *argv[])
     cleanupHunters(&hunter4);
 
     cleanupBuilding(&building);
+    printf("\nGhost was a %s", getGhostName(gh.type));
     printf("\nSimulation complete.\n");
 
     

@@ -125,6 +125,7 @@ void switchRoomsHunter(HunterType *hunter){
 */
 void collectEvidence(HunterType *hunter){
     if(sem_trywait(&(hunter->room->mutex)) != 0){
+        sem_post(&(hunter->room->mutex));
         return;
     }
     int evFlag = 0;   
@@ -135,18 +136,18 @@ void collectEvidence(HunterType *hunter){
     
     if(hunter->room->evidence->size == 0){
         switch(hunter->reads) {
-        case EMF:
-            evRange = randFloat(4.7, 5);
-            break;
-        case TEMPERATURE:
-            evRange = randFloat(-10, 27);
-            break;
-        case FINGERPRINTS:
-            evRange = 1;
-            break;
-        case SOUND:
-            evRange = randFloat(40, 75);
-            break;
+            case EMF:
+                evRange = randFloat(4.7, 5);
+                break;
+            case TEMPERATURE:
+                evRange = randFloat(-10, 27);
+                break;
+            case FINGERPRINTS:
+                evRange = 1;
+                break;
+            case SOUND:
+                evRange = randFloat(40, 75);
+                break;
         }
         initEvidence(evRange, hunter->reads, 0, &leftEvidence);
         addEvidenceToHunter(hunter, &leftEvidence);
@@ -182,7 +183,7 @@ void shareEvidence(HunterType *hunter) {
     if(hunter->room->hunterListSize > 1) {
         int random = randInt(0, hunter->room->hunterListSize);
         if(strcmp(hunter->name, hunter->room->hunters[random]->name) != 0) {
-            EvNodeType* current = hunter->room->evidence->head;
+            EvNodeType* current = hunter->evList->head;
             while(current != NULL) {
                 switch (current->data->type) {
                     case EMF:
@@ -238,6 +239,7 @@ void* chooseAction(void* hunterArg){
 			case(1):
                 printf("%s is collecting evidence in %s\n", hunter->name, hunter->room->name);
 				collectEvidence(hunter);
+                printEvidenceList(hunter->evList);
 				break;
 			case(2):
                 printf("%s is switching rooms in %s\n", hunter->name, hunter->room->name);
@@ -268,7 +270,7 @@ void* chooseAction(void* hunterArg){
             removeHunterFromRoom(hunter->room, hunter);
             break;
         }
-        usleep(USLEEP_TIME);
+        // usleep(USLEEP_TIME);
     }
     return 0;
 }

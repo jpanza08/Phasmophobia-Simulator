@@ -94,13 +94,13 @@ void* chooseGhostAction(void* ghostArg){
             ghost->currRoom->ghost = NULL;
             break;
         }
-        usleep(USLEEP_TIME);
+        // usleep(USLEEP_TIME);
     }
     return 0;
 }
 
 
-void switchGhostRooms(GhostType* ghost){ // try wait bs gl
+void switchGhostRooms(GhostType* ghost){
     RoomType* current = ghost->currRoom;
     RoomType* destination = NULL;
     RoomListType* list = ghost->currRoom->next;
