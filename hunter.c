@@ -224,7 +224,7 @@ void shareEvidence(HunterType *hunter) {
     }
 }
 
-void findGhost(HunterType* hunter, GhostEnumType* foundGhost) {
+void findGhost(HunterType* hunter, int* foundGhost) {
     EvNodeType* current = hunter->evList->head;
     int emfFound = 0;
     int tempFound = 0;
@@ -253,19 +253,22 @@ void findGhost(HunterType* hunter, GhostEnumType* foundGhost) {
 
     if(emfFound && tempFound && fingFound) {
         // *foundGhost = POLTERGEIST;
-        foundGhost = 0;
+        *foundGhost = 0;
     }
     if(emfFound && tempFound && soundFound) {
-        printf("\n1");
+        // printf("\n1");
         // *foundGhost = BANSHEE;
+        *foundGhost = 1;
     }
     if(emfFound && fingFound && soundFound) {
-        printf("\n2");
-        *foundGhost = BULLIES;
+        // printf("\n2");
+        // *foundGhost = BULLIES;
+        *foundGhost = 2;
     }
     if(tempFound && fingFound && soundFound) {
-        printf("\n3");
-        *foundGhost = PHANTOM;
+        // printf("\n3");
+        // *foundGhost = PHANTOM;
+        *foundGhost = 3;
     }
 }
 

@@ -101,8 +101,7 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-        printf("\n%d", hunterFoundGhost);
-        printf("\nGhost was a %s and the hunters guessed %s", getGhostName(gh.type), getGhostName(hunterFoundGhost));
+        printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type), getGhostName(gh.type));
     }
     
     // GhostEnumType types[3];
