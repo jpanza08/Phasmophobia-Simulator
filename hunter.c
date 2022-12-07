@@ -74,15 +74,10 @@ void removeHunterFromRoom(RoomType* room, HunterType* h) {
        in:   hunter
       out:   cleaned up hunter 
 */
-void cleanupHunters(HunterType* hunters){
-    EvNodeType* current = hunters->evList->head;
-    EvNodeType* temp;
-    while(current != NULL) {
-        temp = current;
-        current = current->next;
-        free(temp);
-    }
-    free(hunters->evList);
+void cleanupHunters(HunterType* hunter){
+    cleanupEvidenceList(hunter->evList);
+    free(hunter->evList);
+    
 }
 
 /*
@@ -148,16 +143,16 @@ void collectEvidence(HunterType *hunter){
     if(hunter->room->evidence->size == 0){
         switch(hunter->reads) {
             case EMF:
-                evRange = randFloat(4.7, 5);
+                evRange = randFloat(EMF_MIN_STANDARD, EMF_MAX_STANDARD);
                 break;
             case TEMPERATURE:
-                evRange = randFloat(-10, 27);
+                evRange = randFloat(TEMP_MIN_STANDARD, TEMP_MAX_STANDARD);
                 break;
             case FINGERPRINTS:
-                evRange = 1;
+                evRange = FINGERPRINT_STANDARD;
                 break;
             case SOUND:
-                evRange = randFloat(40, 75);
+                evRange = randFloat(SOUND_MIN_STANDARD, SOUND_MAX_STANDARD);
                 break;
         }
         initEvidence(evRange, hunter->reads, 0, leftEvidence);

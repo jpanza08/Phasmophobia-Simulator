@@ -118,12 +118,14 @@ void cleanupEvidenceList(EvidenceListType *list){
     if(list->head == NULL)
         return;
     if(list->head == list->tail){
+        free(list->head->data);
         free(list->head);
         return;
     }
     curr = list->head;
     next = curr->next;
     while(curr->next != NULL){
+        free(curr->data);
         free(curr);
         curr = next;
         next = curr->next;

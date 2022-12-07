@@ -82,12 +82,14 @@ void cleanupRoomData(RoomListType* list){
     next = curr->next;
 
     while(curr->next != NULL){
-        
+        cleanupEvidenceList(curr->data->evidence);
+        free(curr->data->evidence);
         free(curr);
         curr = next;
         next = curr->next;
-
     }
+    cleanupEvidenceList(curr->data->evidence);
+    free(curr->data->evidence);
     free(curr);
 }
 
@@ -110,8 +112,6 @@ void cleanupRoomList(RoomListType *list){
     next = curr->next;
     while(curr->next != NULL){
         free(curr->data->next);
-        cleanupEvidenceList(curr->data->evidence);
-        free(curr->data->evidence);
         free(curr->data);
         free(curr);
         curr = next;
