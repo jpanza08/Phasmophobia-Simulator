@@ -224,6 +224,51 @@ void shareEvidence(HunterType *hunter) {
     }
 }
 
+void findGhost(HunterType* hunter, GhostEnumType* foundGhost) {
+    EvNodeType* current = hunter->evList->head;
+    int emfFound = 0;
+    int tempFound = 0;
+    int fingFound = 0;
+    int soundFound = 0;
+
+    while(current != NULL) {
+        if(current->data->ghostly) {
+            switch(current->data->type) {
+                case EMF:
+                    emfFound = 1;
+                    break;
+                case TEMPERATURE:
+                    tempFound = 1;
+                    break;
+                case SOUND:
+                    soundFound = 1;
+                    break;
+                case FINGERPRINTS:
+                    fingFound = 1;
+                    break;
+            }
+        }
+        current = current->next;
+    }
+
+    if(emfFound && tempFound && fingFound) {
+        // *foundGhost = POLTERGEIST;
+        foundGhost = 0;
+    }
+    if(emfFound && tempFound && soundFound) {
+        printf("\n1");
+        // *foundGhost = BANSHEE;
+    }
+    if(emfFound && fingFound && soundFound) {
+        printf("\n2");
+        *foundGhost = BULLIES;
+    }
+    if(tempFound && fingFound && soundFound) {
+        printf("\n3");
+        *foundGhost = PHANTOM;
+    }
+}
+
 /*
  Function:   chooseAction
   Purpose:   functions for threads to decide what the hunter will do.
