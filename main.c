@@ -93,7 +93,16 @@ int main(int argc, char *argv[])
 
     if(ctr == 4) {
         printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type));
-    } 
+    } else {
+        int hunterFoundGhost;
+        for(int i = 0; i < building.hunterListSize; ++i){
+            if(building.hunters[i]->fear < MAX_FEAR && building.hunters[i]->boredom < BOREDOM_MAX) {
+                findGhost(building.hunters[i], &hunterFoundGhost);
+                break;
+            }
+        }
+        printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type), getGhostName(gh.type));
+    }
     
     // GhostEnumType types[3];
     // switch(gh.type){
@@ -119,17 +128,7 @@ int main(int argc, char *argv[])
     //         break;
     // }
     
-    // for(int i = 0; i < 4; ++i){
-    //     // if(building.hunters[i]->fear < 100){
-    //     //     //Check against each type of evidence I guess
 
-    //     // }
-    //     printHunterEvidence(building.hunters[i]);
-    // }
-    printHunterEvidence(&hunter1);
-    // printHunterEvidence(&hunter2);
-    // printHunterEvidence(&hunter3);
-    // printHunterEvidence(&hunter4);
 
     
     
@@ -139,7 +138,6 @@ int main(int argc, char *argv[])
     cleanupHunters(&hunter4);
 
     cleanupBuilding(&building);
-    printf("\nGhost was a %s", getGhostName(gh.type));
     printf("\nSimulation complete.\n");
 
     

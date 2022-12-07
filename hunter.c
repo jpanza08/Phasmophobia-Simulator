@@ -138,7 +138,7 @@ void collectEvidence(HunterType *hunter){
     int evRange; 
     EvNodeType *curr =  hunter->room->evidence->head;
     EvNodeType *prev = curr; 
-    EvidenceType *leftEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+    // EvidenceType *leftEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
     
     if(hunter->room->evidence->size == 0){
         switch(hunter->reads) {
@@ -155,8 +155,8 @@ void collectEvidence(HunterType *hunter){
                 evRange = randFloat(SOUND_MIN_STANDARD, SOUND_MAX_STANDARD);
                 break;
         }
-        initEvidence(evRange, hunter->reads, 0, leftEvidence);
-        addEvidenceToHunter(hunter, leftEvidence);
+        // initEvidence(evRange, hunter->reads, 0, leftEvidence);
+        // addEvidenceToHunter(hunter, leftEvidence);
         return;
     }
     
@@ -221,6 +221,54 @@ void shareEvidence(HunterType *hunter) {
                 current = current->next;
             }
         }
+    }
+}
+
+void findGhost(HunterType* hunter, int* foundGhost) {
+    EvNodeType* current = hunter->evList->head;
+    int emfFound = 0;
+    int tempFound = 0;
+    int fingFound = 0;
+    int soundFound = 0;
+
+    while(current != NULL) {
+        if(current->data->ghostly) {
+            switch(current->data->type) {
+                case EMF:
+                    emfFound = 1;
+                    break;
+                case TEMPERATURE:
+                    tempFound = 1;
+                    break;
+                case SOUND:
+                    soundFound = 1;
+                    break;
+                case FINGERPRINTS:
+                    fingFound = 1;
+                    break;
+            }
+        }
+        current = current->next;
+    }
+
+    if(emfFound && tempFound && fingFound) {
+        // *foundGhost = POLTERGEIST;
+        *foundGhost = 0;
+    }
+    if(emfFound && tempFound && soundFound) {
+        // printf("\n1");
+        // *foundGhost = BANSHEE;
+        *foundGhost = 1;
+    }
+    if(emfFound && fingFound && soundFound) {
+        // printf("\n2");
+        // *foundGhost = BULLIES;
+        *foundGhost = 2;
+    }
+    if(tempFound && fingFound && soundFound) {
+        // printf("\n3");
+        // *foundGhost = PHANTOM;
+        *foundGhost = 3;
     }
 }
 
