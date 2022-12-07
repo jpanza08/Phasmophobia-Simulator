@@ -132,20 +132,8 @@ void collectEvidence(HunterType *hunter){
     EvNodeType *curr =  hunter->room->evidence->head;
     EvNodeType *prev = curr; 
     EvidenceType leftEvidence;
-    while(curr != NULL){
-        if(curr->data->type == hunter->reads){
-            addEvidenceToHunter(hunter, curr->data);
-            printf("%s collected evidence from %s.\n", hunter->name, hunter->room->name);
-            prev->next = curr->next;
-            evFlag = 1;
-            break;
-        }
-
-        prev = curr;
-        curr = curr->next;
-    }
-
-    if(!evFlag){
+    
+    if(hunter->room->evidence->size == 0){
         switch(hunter->reads) {
         case EMF:
             evRange = randFloat(4.7, 5);
@@ -161,9 +149,26 @@ void collectEvidence(HunterType *hunter){
             break;
         }
         initEvidence(evRange, hunter->reads, 0, &leftEvidence);
-        //Not sure what to do here. 
-    
+        addEvidenceToHunter(hunter, &leftEvidence);
+        return;
     }
+    
+    while(curr != NULL){
+        if(curr->data->type == hunter->reads){
+            addEvidenceToHunter(hunter, curr->data);
+            if(curr->data->ghostly){
+                hunter->ghostlyEvidence++;
+            }
+            printf("%s collected evidence from %s.\n", hunter->name, hunter->room->name);
+            prev->next = curr->next;
+            evFlag = 1;
+            break;
+        }
+
+        prev = curr;
+        curr = curr->next;
+    }
+    
     sem_post(&(hunter->room->mutex));
 }
 
@@ -247,30 +252,20 @@ void* chooseAction(void* hunterArg){
 				}
 				break;
 		}
-        
 
-        if(hunter->evList->size >= 3){
+        if(hunter->ghostlyEvidence >= 3){
             printf("%s got enough evidence to leave.\n", hunter->name);
             removeHunterFromRoom(hunter->room, hunter);
-            // sem_wait(&(hunter->building->mutex));
-            // hunter->building->hunterListSize--;
-            // sem_post(&(hunter->building->mutex));
             break;
         } 
         if(hunter->fear >= 100){
             printf("%s got too scared and left!\n", hunter->name);
             removeHunterFromRoom(hunter->room, hunter);
-            // sem_wait(&(hunter->building->mutex));
-            // hunter->building->hunterListSize--;
-            // sem_post(&(hunter->building->mutex));
             break;
         }
         if(hunter->boredom <= 0){
             printf("%s got bored and left\n", hunter->name);
             removeHunterFromRoom(hunter->room, hunter);
-            // sem_wait(&(hunter->building->mutex));
-            // hunter->building->hunterListSize--;
-            // sem_post(&(hunter->building->mutex));
             break;
         }
         usleep(USLEEP_TIME);

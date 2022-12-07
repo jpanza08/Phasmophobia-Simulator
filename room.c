@@ -3,8 +3,8 @@
 void initRoom(RoomType* room, char* name){
     
   
-    EvidenceListType* evList = (EvidenceListType*)malloc(sizeof(EvidenceListType));
-    room->next = (RoomListType*)malloc(sizeof(RoomListType));
+    EvidenceListType* evList = (EvidenceListType*)calloc(1,sizeof(EvidenceListType));
+    room->next = (RoomListType*)calloc(1,sizeof(RoomListType));
     strcpy(room->name, name);
     initRoomList(room->next);
     initEvidenceList(evList);
@@ -29,7 +29,7 @@ void initRoomList(RoomListType* list){
       out:   updated roomlist for room
 */
 void appendRoom(RoomListType *list, RoomType *room){
-    RoomNodeType* newNode = (RoomNodeType*) malloc(sizeof(RoomNodeType));
+    RoomNodeType* newNode = (RoomNodeType*) calloc(1, sizeof(RoomNodeType));
     newNode->data = room;
 
     //Empty

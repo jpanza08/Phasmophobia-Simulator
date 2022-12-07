@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
 
     
     printf("\n-------");
-    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter1.name, hunter1.evList->size, hunter1.fear, hunter1.boredom);
-    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter2.name, hunter2.evList->size, hunter2.fear, hunter2.boredom);
-    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter3.name, hunter3.evList->size, hunter3.fear, hunter3.boredom);
-    printf("\n%s has %d evidences, is %d scared, and %d bored.", hunter4.name, hunter4.evList->size, hunter4.fear, hunter4.boredom);
+    printf("\n%s has %d evidences, %d ghostly evidences, is %d scared, and %d bored.", hunter1.name, hunter1.evList->size, hunter1.ghostlyEvidence, hunter1.fear, hunter1.boredom);
+    printf("\n%s has %d evidences, %d ghostly evidences, is %d scared, and %d bored.", hunter2.name, hunter2.evList->size, hunter2.ghostlyEvidence, hunter2.fear, hunter2.boredom);
+    printf("\n%s has %d evidences, %d ghostly evidences, is %d scared, and %d bored.", hunter3.name, hunter3.evList->size, hunter3.ghostlyEvidence, hunter3.fear, hunter3.boredom);
+    printf("\n%s has %d evidences, %d ghostly evidences, is %d scared, and %d bored.", hunter4.name, hunter4.evList->size, hunter4.ghostlyEvidence, hunter4.fear, hunter4.boredom);
     printf("\n-------");
 
     int ctr = 0;
@@ -92,17 +92,43 @@ int main(int argc, char *argv[])
     printf("\n-------");
 
     if(ctr == 4) {
-        printf("\nGhost is a: %s, and has won the game\n", getGhostName(gh.type));
+        printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type));
     } else {
-        printf("\nhello");
+       
     }
-
-
-    for(int i = 0; i < building.hunterListSize; ++i) {
-        if(building.hunters[i]->fear < 100) {
+    
+    GhostEnumType types[3];
+    switch(gh.type){
+        case(POLTERGEIST):
+            types[0] = EMF;
+            types[1] = TEMPERATURE;
+            types[2] = FINGERPRINTS;
             break;
-        }
+        case(BANSHEE):
+            types[0] = EMF;
+            types[1] = TEMPERATURE;
+            types[2] = SOUND;
+            break;
+        case(PHANTOM):
+            types[0] = TEMPERATURE;
+            types[1] = FINGERPRINTS;
+            types[2] = SOUND;
+            break;
+        case(BULLIES):
+            types[0] = EMF;
+            types[1] = FINGERPRINTS;
+            types[2] = SOUND;
+            break;
     }
+    
+    for(int i = 0; i < 4; ++i){
+        if(building.hunters[i]->fear < 100){
+            //Check against each type of evidence I guess
+
+        }
+
+    }
+    
     
     cleanupHunters(&hunter1);
     cleanupHunters(&hunter2);

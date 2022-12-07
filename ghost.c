@@ -22,11 +22,6 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
 }
 
 void leaveEvidence(RoomType* room, GhostType* ghost) {
-    // while(1){
-    //     if(sem_trywait(&(room->mutex)) == 0){
-    //         break;
-    //     }
-    // }
     if(sem_trywait(&(room->mutex)) != 0){
         return;
     }
@@ -53,16 +48,17 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
 
     switch(et) {
         case EMF:
-            evRange = randFloat(4.7, 5);
+            evRange = randFloat(EMF_MIN_GHOST, EMF_MAX_GHOST);
+            
             break;
         case TEMPERATURE:
-            evRange = randFloat(-10, 27);
+            evRange = randFloat(TEMP_MIN_GHOST, TEMP_MAX_GHOST);
             break;
         case FINGERPRINTS:
-            evRange = 1;
+            evRange = FINGERPRINT_GHOST;
             break;
         case SOUND:
-            evRange = randFloat(40, 75);
+            evRange = randFloat(SOUND_MIN_GHOST, SOUND_MAX_GHOST);
             break;
     }
     initEvidence(evRange, et, 1, &evLeft);
