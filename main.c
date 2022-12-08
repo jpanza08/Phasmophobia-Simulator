@@ -97,40 +97,12 @@ int main(int argc, char *argv[])
         int hunterFoundGhost;
         for(int i = 0; i < building.hunterListSize; ++i){
             if(building.hunters[i]->fear < MAX_FEAR && building.hunters[i]->boredom < BOREDOM_MAX) {
-                findGhost(building.hunters[i], &hunterFoundGhost);
+                //findGhost(building.hunters[i], &hunterFoundGhost);
                 break;
             }
         }
         printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type), getGhostName(gh.type));
-    }
-    
-    // GhostEnumType types[3];
-    // switch(gh.type){
-    //     case(POLTERGEIST):
-    //         types[0] = EMF;
-    //         types[1] = TEMPERATURE;
-    //         types[2] = FINGERPRINTS;
-    //         break;
-    //     case(BANSHEE):
-    //         types[0] = EMF;
-    //         types[1] = TEMPERATURE;
-    //         types[2] = SOUND;
-    //         break;
-    //     case(PHANTOM):
-    //         types[0] = TEMPERATURE;
-    //         types[1] = FINGERPRINTS;
-    //         types[2] = SOUND;
-    //         break;
-    //     case(BULLIES):
-    //         types[0] = EMF;
-    //         types[1] = FINGERPRINTS;
-    //         types[2] = SOUND;
-    //         break;
-    // }
-    
-
-
-    
+    } 
     
     cleanupHunters(&hunter1);
     cleanupHunters(&hunter2);

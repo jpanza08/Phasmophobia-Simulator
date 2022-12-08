@@ -138,9 +138,10 @@ void collectEvidence(HunterType *hunter){
     int evRange; 
     EvNodeType *curr =  hunter->room->evidence->head;
     EvNodeType *prev = curr; 
-    EvidenceType *leftEvidence = (EvidenceType*) calloc(1,sizeof(EvidenceType));
+    
     if(hunter->room->evidence->size == 0){
-        switch(hunter->reads) {
+       EvidenceType *leftEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+       switch(hunter->reads) {
             case EMF:
                 evRange = randFloat(EMF_MIN_STANDARD, EMF_MAX_STANDARD);
                 break;
@@ -161,7 +162,9 @@ void collectEvidence(HunterType *hunter){
     
     while(curr != NULL){
         if(curr->data->type == hunter->reads){
-            addEvidenceToHunter(hunter, curr->data);
+            EvidenceType *newEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+            copyEvidence(newEvidence, curr->data);
+            addEvidenceToHunter(hunter, newEvidence);
             if(curr->data->ghostly){
                 hunter->ghostlyEvidence++;
             }
@@ -194,25 +197,33 @@ void shareEvidence(HunterType *hunter) {
                 switch (current->data->type) {
                     case EMF:
                         if(current->data->value >= 4.9) {
-                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            EvidenceType *newEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+                            copyEvidence(newEvidence, current->data);
+                            addEvidenceToHunter(hunter->room->hunters[random], newEvidence);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case TEMPERATURE:
                         if(-10 <= current->data->value && current->data->value <= 0) {
-                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            EvidenceType *newEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+                            copyEvidence(newEvidence, current->data);
+                            addEvidenceToHunter(hunter->room->hunters[random], newEvidence);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case FINGERPRINTS:
                         if(current->data->value == 1) {
-                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            EvidenceType *newEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+                            copyEvidence(newEvidence, current->data);
+                            addEvidenceToHunter(hunter->room->hunters[random], newEvidence);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
                     case SOUND:
                         if(70 <= current->data->value) {
-                            addEvidenceToHunter(hunter->room->hunters[random], current->data);
+                            EvidenceType *newEvidence = (EvidenceType*) calloc(1, sizeof(EvidenceType));
+                            copyEvidence(newEvidence, current->data);
+                            addEvidenceToHunter(hunter->room->hunters[random], newEvidence);
                             hunter->room->hunters[random]->ghostlyEvidence++;
                         }
                         break;
@@ -303,7 +314,7 @@ void* chooseAction(void* hunterArg){
 			case 3:
 				if(hunter->room->hunterListSize > 1) {
                     printf("%s is sharing evidence in %s\n", hunter->name, hunter->room->name);
-					// shareEvidence(hunter);
+					shareEvidence(hunter);
                     hunter->boredom--;
 				}
 				break;
@@ -326,5 +337,13 @@ void* chooseAction(void* hunterArg){
         }
         // usleep(USLEEP_TIME);
     }
+
+    // EvNodeType *temp = hunter->evList->head;
+    // while(temp != NULL){
+    //     printf("value: %f\n", temp->data->value);
+    //     temp = temp->next;
+
+    // }
+
     return 0;
 }

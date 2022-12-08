@@ -137,6 +137,7 @@ void printHunterList(RoomType*);
 void randomRoom(RoomListType*, GhostType*, int);
 void randomRoomHunter(RoomListType*, HunterType*);
 void addEvidenceToRoom(RoomType*, EvidenceType*);
+void copyEvidence(EvidenceType*, EvidenceType*);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
 const char* getGhostName(GhostEnumType);

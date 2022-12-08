@@ -62,14 +62,13 @@ void addEvidenceToRoom(RoomType *room, EvidenceType *ev){
         room->evidence->head = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
-        // free(newNode);
+        
 
     }else{
         printf("Ghost left evidence in %s.\n", room->name);
         room->evidence->tail->next = newNode;
         room->evidence->tail = newNode;
         room->evidence->size++;
-        free(newNode);
 
     }
 }
@@ -110,6 +109,21 @@ void printEvidenceList(EvidenceListType* list) {
         current = current->next;
     }
 }
+
+/*
+ Function:   copyEvidence
+  Purpose:   makes a deep copy of evidence from src to dest
+       in:   source evidence
+      out:   destination evidence
+*/
+void copyEvidence(EvidenceType* dest, EvidenceType* src){
+    dest->type = src->type;
+    dest->ghostly = src->ghostly;
+    dest->value = src->value;
+
+}
+
+
 
 /*
  Function:   cleanupEvidenceList
