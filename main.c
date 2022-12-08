@@ -95,12 +95,13 @@ int main(int argc, char *argv[])
         printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type));
     } else {
         int hunterFoundGhost;
-        for(int i = 0; i < building.hunterListSize; ++i){
-            if(building.hunters[i]->fear < MAX_FEAR && building.hunters[i]->boredom < BOREDOM_MAX) {
-                //findGhost(building.hunters[i], &hunterFoundGhost);
-                break;
-            }
-        }
+        // for(int i = 0; i < building.hunterListSize; ++i){
+        //     if(building.hunters[i]->fear < MAX_FEAR && building.hunters[i]->boredom < BOREDOM_MAX) {
+                
+        //         break;
+        //     }
+        // }
+        findGhost(*(building.hunters), &hunterFoundGhost);
         printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type), getGhostName(gh.type));
     } 
     

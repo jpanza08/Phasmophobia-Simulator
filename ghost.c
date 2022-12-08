@@ -93,7 +93,7 @@ void* chooseGhostAction(void* ghostArg){
             ghost->currRoom->ghost = NULL;
             break;
         }
-        // usleep(USLEEP_TIME);
+    //    usleep(USLEEP_TIME);
     }
     return 0;
 }

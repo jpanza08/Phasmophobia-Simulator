@@ -9,10 +9,10 @@
 
 #define MAX_STR                 64
 #define FEAR_RATE                1
-#define MAX_FEAR               100
+#define MAX_FEAR               100 
 #define MAX_HUNTERS              4
 #define USLEEP_TIME          50000
-#define BOREDOM_MAX             99
+#define BOREDOM_MAX            100
 #define C_NOK                    0
 #define C_OK                     1
 
@@ -41,7 +41,7 @@ typedef enum { POLTERGEIST, BANSHEE, BULLIES, PHANTOM } GhostEnumType;
 typedef struct {
   GhostEnumType type;
   struct RoomType *currRoom;
-   struct BuildingType *building;
+  struct BuildingType *building;
   int boredom;
 } GhostType;
 

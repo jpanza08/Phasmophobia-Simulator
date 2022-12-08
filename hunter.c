@@ -177,7 +177,6 @@ void collectEvidence(HunterType *hunter){
         prev = curr;
         curr = curr->next;
     }
-    
     sem_post(&(hunter->room->mutex));
 }
 
@@ -234,31 +233,34 @@ void shareEvidence(HunterType *hunter) {
     }
 }
 
-void findGhost(HunterType* hunter, int* foundGhost) {
-    EvNodeType* current = hunter->evList->head;
+void findGhost(HunterType* hunters, int* foundGhost) {
     int emfFound = 0;
     int tempFound = 0;
     int fingFound = 0;
     int soundFound = 0;
-
-    while(current != NULL) {
-        if(current->data->ghostly) {
-            switch(current->data->type) {
-                case EMF:
-                    emfFound = 1;
-                    break;
-                case TEMPERATURE:
-                    tempFound = 1;
-                    break;
-                case SOUND:
-                    soundFound = 1;
-                    break;
-                case FINGERPRINTS:
-                    fingFound = 1;
-                    break;
+    for(int i = 0; i < MAX_HUNTERS; ++i){
+        if(hunters[i].ghostlyEvidence != 0){
+        EvNodeType* current = hunters[i].evList->head;
+        while(current != NULL) {
+            if(current->data->ghostly) {
+                switch(current->data->type) {
+                    case EMF:
+                        emfFound = 1;
+                        break;
+                    case TEMPERATURE:
+                        tempFound = 1;
+                        break;
+                    case SOUND:
+                        soundFound = 1;
+                        break;
+                    case FINGERPRINTS:
+                        fingFound = 1;
+                        break;
+                }
             }
+            current = current->next;
         }
-        current = current->next;
+        }
     }
 
     if(emfFound && tempFound && fingFound) {
@@ -280,6 +282,8 @@ void findGhost(HunterType* hunter, int* foundGhost) {
         // *foundGhost = PHANTOM;
         *foundGhost = 3;
     }
+
+    printf("%s\n\n\n\n", getGhostName(*foundGhost));
 }
 
 /*
@@ -337,13 +341,6 @@ void* chooseAction(void* hunterArg){
         }
         // usleep(USLEEP_TIME);
     }
-
-    // EvNodeType *temp = hunter->evList->head;
-    // while(temp != NULL){
-    //     printf("value: %f\n", temp->data->value);
-    //     temp = temp->next;
-
-    // }
 
     return 0;
 }
