@@ -17,10 +17,6 @@ void addEvidenceToHunter(HunterType* h, EvidenceType* ev) {
     addEvidence(h->evList, ev);
 }
 
-void printHunterEvidence(HunterType* h) {
-    // printEvidenceList(h->evList);
-}
-
 /*
  Function:   addHunterToRoom
   Purpose:   add hunter to a room
@@ -46,7 +42,6 @@ void addHunterToRoom(RoomType* room, HunterType* h) {
       out:   updated room without hunter
 */
 void removeHunterFromRoom(RoomType* room, HunterType* h) {
-    
     int length = room->hunterListSize;
     int index;
     if(length == 0) {
@@ -91,10 +86,8 @@ void switchRoomsHunter(HunterType *hunter){
     RoomType* destination = NULL;
     RoomListType* list = hunter->room->next;
     RoomNodeType *curr = list->head;
-   
     int stop = randInt(0,list->size);
    
-
     for(int i = 0; i < list->size; ++i){
             if(i == stop){
                 destination = curr->data;
@@ -103,24 +96,24 @@ void switchRoomsHunter(HunterType *hunter){
             curr = curr->next;
     }
 
-        // If the hunter's room is available for modification, lock it
-        if (sem_trywait(&(hunter->room->mutex)) == 0) {
-            // If the new room is *not* available for modification, unlock the hunter's room and return nothing
-            if(sem_trywait(&(destination->mutex)) != 0) {
-                // We must remember to unlock the locked current room
-                sem_post(&(hunter->room->mutex));
-                return;
-            }
+    // If the hunter's room is available for modification, lock it
+    if (sem_trywait(&(hunter->room->mutex)) == 0) {
+        // If the new room is *not* available for modification, unlock the hunter's room and return nothing
+        if(sem_trywait(&(destination->mutex)) != 0) {
+            // We must remember to unlock the locked current room
+            sem_post(&(hunter->room->mutex));
+            return;
         }
-        //If we make it here, the current and next rooms are locked
-        removeHunterFromRoom(hunter->room, hunter);
-        hunter->room = destination;
-        addHunterToRoom(destination, hunter);
-        printf("%s moved into %s.\n", hunter->name, destination->name);
-        
+    }
+    //If we make it here, the current and next rooms are locked
+    removeHunterFromRoom(hunter->room, hunter);
+    hunter->room = destination;
+    addHunterToRoom(destination, hunter);
+    printf("%s moved into %s.\n", hunter->name, destination->name);
+    
 
-        sem_post(&(current->mutex));
-        sem_post(&(hunter->room->mutex));
+    sem_post(&(current->mutex));
+    sem_post(&(hunter->room->mutex));
 }
 
 /*
@@ -233,6 +226,12 @@ void shareEvidence(HunterType *hunter) {
     }
 }
 
+/*
+ Function:   findGhost
+  Purpose:   checks which ghost the hunter has found
+       in:   hunter list
+      out:   ghost that the hunter found
+*/
 void findGhost(HunterType* hunters, int* foundGhost) {
     int emfFound = 0;
     int tempFound = 0;
@@ -240,50 +239,38 @@ void findGhost(HunterType* hunters, int* foundGhost) {
     int soundFound = 0;
     for(int i = 0; i < MAX_HUNTERS; ++i){
         if(hunters[i].ghostlyEvidence != 0){
-        EvNodeType* current = hunters[i].evList->head;
-        while(current != NULL) {
-            if(current->data->ghostly) {
-                switch(current->data->type) {
-                    case EMF:
-                        emfFound = 1;
-                        break;
-                    case TEMPERATURE:
-                        tempFound = 1;
-                        break;
-                    case SOUND:
-                        soundFound = 1;
-                        break;
-                    case FINGERPRINTS:
-                        fingFound = 1;
-                        break;
+            EvNodeType* current = hunters[i].evList->head;
+            while(current != NULL) {
+                if(current->data->ghostly) {
+                    switch(current->data->type) {
+                        case EMF:
+                            emfFound = 1;
+                            break;
+                        case TEMPERATURE:
+                            tempFound = 1;
+                            break;
+                        case SOUND:
+                            soundFound = 1;
+                            break;
+                        case FINGERPRINTS:
+                            fingFound = 1;
+                            break;
+                    }
                 }
+                current = current->next;
             }
-            current = current->next;
-        }
         }
     }
 
     if(emfFound && tempFound && fingFound) {
-        // *foundGhost = POLTERGEIST;
         *foundGhost = 0;
-    }
-    if(emfFound && tempFound && soundFound) {
-        // printf("\n1");
-        // *foundGhost = BANSHEE;
+    } else if(emfFound && tempFound && soundFound) {
         *foundGhost = 1;
-    }
-    if(emfFound && fingFound && soundFound) {
-        // printf("\n2");
-        // *foundGhost = BULLIES;
+    } else if(emfFound && fingFound && soundFound) {
         *foundGhost = 2;
-    }
-    if(tempFound && fingFound && soundFound) {
-        // printf("\n3");
-        // *foundGhost = PHANTOM;
+    } else if(tempFound && fingFound && soundFound) {
         *foundGhost = 3;
-    }
-
-    printf("%s\n\n\n\n", getGhostName(*foundGhost));
+    } 
 }
 
 /*
@@ -308,7 +295,6 @@ void* chooseAction(void* hunterArg){
 			case(1):
                 printf("%s is collecting evidence in %s\n", hunter->name, hunter->room->name);
 				collectEvidence(hunter);
-                // printEvidenceList(hunter->evList);
 				break;
 			case(2):
                 printf("%s is switching rooms in %s\n", hunter->name, hunter->room->name);
@@ -339,7 +325,6 @@ void* chooseAction(void* hunterArg){
             removeHunterFromRoom(hunter->room, hunter);
             break;
         }
-        // usleep(USLEEP_TIME);
     }
 
     return 0;

@@ -6,12 +6,13 @@
        in:   ghost enum type
       out:   string of enum
 */
-const char* getGhostName(GhostEnumType name) {
+const char* getGhostName(GhostEnumType name, GhostType* ghost) {
     switch(name) {
         case POLTERGEIST: return "POLTERGEIST";
         case BANSHEE: return "BANSHEE";
         case PHANTOM: return "PHANTOM";
         case BULLIES: return "BULLIES";
+        default: return getGhostName(ghost->type, ghost);
     }
 }
 
@@ -21,6 +22,13 @@ void initGhost(RoomType* startRoom, GhostEnumType type, GhostType* ghost){
     ghost->type = type;
 }
 
+/*
+ Function:   leaveEvidence
+  Purpose:   ghost drops evidence in its current room
+       in:   current room
+       in:   ghost
+      out:   updated room evidence list∂
+*/
 void leaveEvidence(RoomType* room, GhostType* ghost) {
     if(sem_trywait(&(room->mutex)) != 0){
         return;
@@ -65,6 +73,11 @@ void leaveEvidence(RoomType* room, GhostType* ghost) {
     sem_post(&(room->mutex));
 }
 
+/*
+ Function:   chooseGhostAction
+  Purpose:   main ghost thread
+       in:   ghost
+*/
 void* chooseGhostAction(void* ghostArg){
     GhostType* ghost = (GhostType*) ghostArg;
     int random;

@@ -15,3 +15,6 @@ Bonus marks:
     -print formatting
     -we used git for version control
         please refer to gitscreenshot.png for further reference
+
+Known Issues:
+    -memory leak on certain nodes when ghost drops evidence and the hunter picks it up

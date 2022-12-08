@@ -140,7 +140,7 @@ void addEvidenceToRoom(RoomType*, EvidenceType*);
 void copyEvidence(EvidenceType*, EvidenceType*);
 
 void initGhost(RoomType*, GhostEnumType, GhostType*);
-const char* getGhostName(GhostEnumType);
+const char* getGhostName(GhostEnumType, GhostType*);
 void leaveEvidence(RoomType*, GhostType*);
 void* chooseGhostAction(void*);
 void switchGhostRooms(GhostType*);
@@ -149,7 +149,6 @@ void initHunter(RoomType*, EvidenceEnumType, char*, int, HunterType*);
 void addHunterToRoom(RoomType*, HunterType*);
 void addEvidenceToHunter(HunterType*, EvidenceType*);
 void removeHunterFromRoom(RoomType*, HunterType*);
-void printHunterEvidence(HunterType*);
 void cleanupHunters(HunterType*);
 void switchRoomsHunter(HunterType*);
 void collectEvidence(HunterType*);

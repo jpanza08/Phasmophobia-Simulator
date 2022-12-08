@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     
 
     randomRoom(building.rooms, &gh, 0); //Giving ghost random room
-    printf("\nGhost is a: %s, and is in room: %s\n", getGhostName(gh.type), gh.currRoom->name);
+    printf("\nGhost is a: %s, and is in room: %s\n", getGhostName(gh.type, &gh), gh.currRoom->name);
 
     //Initializing hunters
     printf("\nEnter the first Hunter's name: ");
@@ -92,17 +92,11 @@ int main(int argc, char *argv[])
     printf("\n-------");
 
     if(ctr == 4) {
-        printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type));
+        printf("\nGhost is a: %s, and has won the game.\n", getGhostName(gh.type, &gh));
     } else {
         int hunterFoundGhost;
-        // for(int i = 0; i < building.hunterListSize; ++i){
-        //     if(building.hunters[i]->fear < MAX_FEAR && building.hunters[i]->boredom < BOREDOM_MAX) {
-                
-        //         break;
-        //     }
-        // }
         findGhost(*(building.hunters), &hunterFoundGhost);
-        printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type), getGhostName(gh.type));
+        printf("\nGhost was a %s and the hunters guessed %s\nHunters have won", getGhostName(gh.type, &gh), getGhostName(hunterFoundGhost, &gh));
     } 
     
     cleanupHunters(&hunter1);
