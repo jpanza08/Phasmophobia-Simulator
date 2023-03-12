@@ -17,6 +17,34 @@
     https://steamcommunity.com/sharedfiles/filedetails/?id=2251267947
     
 */
+
+void initBuilding(GhostType *ghost,BuildingType *b){
+    RoomListType* roomList = (RoomListType*)calloc(1, sizeof(RoomListType));
+    b->rooms = NULL;
+    b->ghost = ghost;
+    ghost->building = b;
+    b->rooms = roomList;
+    b->hunterListSize = 0;
+    sem_init(&(b->mutex), 0, 1);
+}
+
+void addHunterToBuilding(HunterType* hunter, BuildingType* b){
+    hunter->building = b;
+    b->hunters[b->hunterListSize] = hunter;
+    b->hunterListSize++;
+}
+
+/*
+ Function:   cleanupBuilding
+  Purpose:   deallocates memory used by building
+       in:   building
+      out:   updated building
+*/
+void cleanupBuilding(BuildingType* building){
+    cleanupRoomList(building->rooms);
+    free(building->rooms);
+}
+
 void populateRooms(BuildingType* building) {
     // First, create each room. Perhaps you want to include more data 
     // in the init parameters?
@@ -47,53 +75,27 @@ void populateRooms(BuildingType* building) {
     RoomType* utility_room = calloc(1, sizeof(RoomType));
     initRoom(utility_room, "Utility Room");
 
-    // Now create a linked list of rooms using RoomNodeType in the Building
-    RoomNodeType* van_node = calloc(1, sizeof(RoomNodeType));
-    van_node->room = van;
-    RoomNodeType* hallway_node = calloc(1, sizeof(RoomNodeType));
-    hallway_node->room = hallway;
-    RoomNodeType* master_bedroom_node = calloc(1, sizeof(RoomNodeType));
-    master_bedroom_node->room = master_bedroom;
-    RoomNodeType* boys_bedroom_node = calloc(1, sizeof(RoomNodeType));
-    boys_bedroom_node->room = boys_bedroom;
-    RoomNodeType* bathroom_node = calloc(1, sizeof(RoomNodeType));
-    bathroom_node->room = bathroom;
-    RoomNodeType* basement_node = calloc(1, sizeof(RoomNodeType));
-    basement_node->room = basement;
-    RoomNodeType* basement_hallway_node = calloc(1, sizeof(RoomNodeType));
-    basement_hallway_node->room = basement_hallway;
-    RoomNodeType* right_storage_room_node = calloc(1, sizeof(RoomNodeType));
-    right_storage_room_node->room = right_storage_room;
-    RoomNodeType* left_storage_room_node = calloc(1, sizeof(RoomNodeType));
-    left_storage_room_node->room = left_storage_room;
-    RoomNodeType* kitchen_node = calloc(1, sizeof(RoomNodeType));
-    kitchen_node->room = kitchen;
-    RoomNodeType* living_room_node = calloc(1, sizeof(RoomNodeType));
-    living_room_node->room = living_room;
-    RoomNodeType* garage_node = calloc(1, sizeof(RoomNodeType));
-    garage_node->room = garage;
-    RoomNodeType* utility_room_node = calloc(1, sizeof(RoomNodeType));
-    utility_room_node->room = utility_room;
+//     // Now create a linked list of rooms using RoomNodeType in the Building
+    
+    appendRoom(building->rooms, van);
+    appendRoom(building->rooms, hallway);
+    appendRoom(building->rooms, master_bedroom);
+    appendRoom(building->rooms,boys_bedroom);
+    appendRoom(building->rooms, bathroom);
+    appendRoom(building->rooms, basement);
+    appendRoom(building->rooms,basement_hallway);
+    appendRoom(building->rooms, right_storage_room);
+    appendRoom(building->rooms, left_storage_room);
+    appendRoom(building->rooms, kitchen);
+    appendRoom(building->rooms, living_room);
+    appendRoom(building->rooms, garage);
+    appendRoom(building->rooms, utility_room);
 
-    // Building->rooms might be a linked list structre, or maybe just a node.
-    initRoomList(&building->rooms);
+//     // Building->rooms might be a linked list structre, or maybe just a node.
 
-    appendRoom(building->rooms, van_node);
-    appendRoom(building->rooms, hallway_node);
-    appendRoom(building->rooms, master_bedroom_node);
-    appendRoom(building->rooms, boys_bedroom_node);
-    appendRoom(building->rooms, bathroom_node);
-    appendRoom(building->rooms, basement_node);
-    appendRoom(building->rooms, basement_hallway_node);
-    appendRoom(building->rooms, right_storage_room_node);
-    appendRoom(building->rooms, left_storage_room_node);
-    appendRoom(building->rooms, kitchen_node);
-    appendRoom(building->rooms, living_room_node);
-    appendRoom(building->rooms, garage_node);
-    appendRoom(building->rooms, utility_room_node);
-
-    // Now connect the rooms. It is possible you do not need a separate
-    // function for this, but it is provided to give you a starting point.
+//     // Now connect the rooms. It is possible you do not need a separate
+//     // function for this, but it is provided to give you a starting point.
+   
     connectRooms(van, hallway);
     connectRooms(hallway, master_bedroom);
     connectRooms(hallway, boys_bedroom);
@@ -106,4 +108,18 @@ void populateRooms(BuildingType* building) {
     connectRooms(kitchen, living_room);
     connectRooms(kitchen, garage);
     connectRooms(garage, utility_room);
+}
+
+void scaredHunters(BuildingType *b, int *allScared){
+    int counter = 0;
+    printf("Hunters who got too scared:");
+    for(int i = 0; i < 4; ++i){
+        if(b->hunters[i]->fear >= 100){
+            printf(" %s ", b->hunters[i]->name);
+            counter++;
+        }
+    }
+    if(counter == 4)
+        *allScared = 1;
+
 }
