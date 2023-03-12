@@ -130,7 +130,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Victor Sandru - [LinkedIn](https://www.linkedin.com/in/victorsandru/)
 
-Joshua Panza - [LinkedIn](<[LinkedIn](https://www.linkedin.com/in/victorsandru/)>)
+Joshua Panza - [LinkedIn](https://www.linkedin.com/in/joshua-panza-79261a217/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
