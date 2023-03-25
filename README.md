@@ -1,10 +1,7 @@
 <a name="readme-top"></a>
 
 <h3 align="center">Phasmophobia Simulator</h3>
-
   <p align="center">
-    Ghost hunt simulation
-    <br />
     <a href="https://github.com/jpanza08/2401Final">View Demo</a>
     ·
     <a href="https://github.com/jpanza08/2401Final/issues">Report Bug</a>
