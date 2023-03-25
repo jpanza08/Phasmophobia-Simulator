@@ -3,7 +3,7 @@
 <h3 align="center">Phasmophobia Simulator</h3>
 
   <p align="center">
-    Final project in Systems Programming (COMP2401) at Carleton University
+    Ghost hunt simulation
     <br />
     <a href="https://github.com/jpanza08/2401Final">View Demo</a>
     ·
